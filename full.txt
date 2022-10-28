@@ -16,3 +16,4 @@ formatter
 ascii
 profile
 searx
+tamagochi
