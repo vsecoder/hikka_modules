@@ -3,3 +3,4 @@ test.py
 assets/chromedriver
 sel.py
 ProSpam.py
+.vscode/settings.json

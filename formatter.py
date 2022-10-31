@@ -52,7 +52,7 @@ class FormatterMod(loader.Module):
 
     """
 
-    strings = {"name": "Formatter 🪛"}
+    strings = {"name": "Formatter"}
 
     async def client_ready(self, client, db):
         self._client = client

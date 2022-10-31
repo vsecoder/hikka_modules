@@ -88,7 +88,7 @@ class OctoCodeMod(loader.Module):
     """Module for octopussed code"""
 
     strings = {
-        "name": "🐙 OctoCode",
+        "name": "OctoCode",
         "answer": "🐙 <b>Code</b> <i>octopussed</i>: ",
         "loading": "🐙 <b>Loading</b>...",
         "cfg_theme": "🦎 Themes: monokai, zenburn, material, dark",
