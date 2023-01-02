@@ -31,6 +31,7 @@ class GoogleItMod(loader.Module):
         "name": "ScreenWeb",
         "answer": "🖥 Screenshot {0} {1}x{2}px:",
         "error": "Error!\n \n .screenweb <url>=str <width>=int <height>=int",
+        "cfg_url": "Url to API"
     }
 
     strings_ru = {
@@ -42,7 +43,7 @@ class GoogleItMod(loader.Module):
         self.config = loader.ModuleConfig(
             "url",
             "https://webshot.deam.io/{0}/?width={1}&height={2}?type=png&no_cookie_banners=true&lazy_load=true&destroy_screenshot=true&dark_mode=true&wait_for_event=load&delay=1000&accept_languages=ru&ttl=10",
-            self.strings("cfg_url"),
+            self.strings["cfg_url"],
         )
         self.name = self.strings["name"]
 
