@@ -166,7 +166,7 @@ class SearXMod(loader.Module):
             engines=engine,
         )
 
-        url = "https://fleef.icu:2053/search?"
+        url = "https://s.vsecoder.me/search?"
 
         start_time = datetime.now()
 
