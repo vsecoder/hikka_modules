@@ -22,7 +22,11 @@ from .. import loader, utils
 
 @loader.tds
 class ChatGPTfreeMod(loader.Module):
-    """Бесплатный модуль для ChatGPT"""
+    """
+    Бесплатный модуль для ChatGPT
+    https://t.me/Jarvis_IT_Assistant_bot
+    Сначала запустите бота и отключите уведомления
+    """
 
     strings = {
         "name": "ChatGPTfree",
