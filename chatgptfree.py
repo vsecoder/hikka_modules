@@ -42,7 +42,7 @@ class ChatGPTfreeMod(loader.Module):
     async def client_ready(self, client, db):
         self.client = client
         self.db = db
-        self.gpt_free = 5852478308
+        self.gpt_free = "@Jarvis_IT_Assistant_bot"
 
     async def message_q(
         self,
