@@ -7,6 +7,7 @@ CheckMods
 feedbackbot
 formatter
 googleit
+lmfify
 MangaSlider
 mazemod
 memesgalery
