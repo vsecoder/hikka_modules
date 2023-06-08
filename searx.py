@@ -132,23 +132,33 @@ class SearXMod(loader.Module):
     strings = {
         "name": "SearX",
         "cfg_engine": f"Search engine, all: \n{engines_str}",
-        "error": "❗️ Error: \n{}",
-        "loading": "⏳ Loading...",
+        "cfg_searx_link": "SearX link, get from https://searx.space/",
+        "error": "<emoji document_id=5467928559664242360>❗️</emoji> Error: \n{}",
+        "loading": "<emoji document_id=5381942305081010778>⏳</emoji> Loading...",
     }
 
     strings_ru = {
         "cfg_engine": f"Поисковик, все: \n{engines_str}",
-        "error": "❗️ Ошибка: \n{}",
-        "loading": "⏳ Загрузка...",
+        "cfg_searx_link": "Ссылка на SearX, получить можно на https://searx.space/",
+        "error": "<emoji document_id=5467928559664242360>❗️</emoji> Ошибка: \n{}",
+        "loading": "<emoji document_id=5381942305081010778>⏳</emoji> Загрузка...",
     }
 
     def __init__(self):
         self.config = loader.ModuleConfig(
-            "engine",
-            "duckduckgo",
-            lambda m: self.strings("cfg_engine", m),
+            loader.ConfigValue(
+                "engine",
+                "duckduckgo",
+                lambda m: self.strings("cfg_engine", m),
+                validator=loader.validators.String(),
+            ),
+            loader.ConfigValue(
+                "searx_link",
+                "https://searx.thegpm.org/",
+                lambda m: self.strings("cfg_searx_link", m),
+                validator=loader.validators.Link(),
+            ),
         )
-        self.name = self.strings["name"]
 
     async def request(
         self, session, query: str, engine: str = "yandex", count_results: int = 3
@@ -166,7 +176,7 @@ class SearXMod(loader.Module):
             engines=engine,
         )
 
-        url = "https://s.vsecoder.me/search?"
+        url = self.config["searx_link"]
 
         start_time = datetime.now()
 

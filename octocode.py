@@ -119,19 +119,19 @@ class OctoCodeMod(loader.Module):
             loader.ConfigValue(
                 "theme",
                 "monokai",
-                self.strings("cfg_theme"),
+                lambda m: self.strings("cfg_theme", m),
                 validator=loader.validators.Choice(["monokai", "zenburn", "material", "dark"]),
             ),
             loader.ConfigValue(
                 "line_numbers",
                 True,
-                self.strings("cfg_line_numbers"),
+                lambda m: self.strings("cfg_line_numbers", m),
                 validator=loader.validators.Boolean(),
             ),
             loader.ConfigValue(
                 "default_lang",
                 "python",
-                self.strings("cfg_default_lang"),
+                lambda m: self.strings("cfg_default_lang", m),
             ),
         )
         self.name = self.strings["name"]

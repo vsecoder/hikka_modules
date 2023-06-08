@@ -75,17 +75,17 @@ class MangaSliderMod(loader.Module):
                 [
                     {
                         "text": "◀️",
-                        "data": f"undo/{data['name']}/{data['page']}/{data['chapter']}",
+                        "data": f"manga/undo/{data['name']}/{data['page']}/{data['chapter']}",
                     },
                     {
                         "text": "▶️",
-                        "data": f"next/{data['name']}/{data['page']}/{data['chapter']}",
+                        "data": f"manga/next/{data['name']}/{data['page']}/{data['chapter']}",
                     },
                 ],
                 [
                     {
                         "text": "▶️ Следующая глава",
-                        "data": f"next_chapter/{data['name']}/{data['page']}/{data['chapter']}",
+                        "data": f"manga/next_chapter/{data['name']}/{data['page']}/{data['chapter']}",
                     }
                 ]
             ]
@@ -124,7 +124,10 @@ class MangaSliderMod(loader.Module):
                 )
 
     async def feedback_callback_handler(self, call: InlineCall):
-        args = call.data.split("/")
+        if not call.data.startswith("manga"):
+            return
+        
+        args = call.data.replace("manga/", "").split("/")
 
         data = {
             "name": args[1],
