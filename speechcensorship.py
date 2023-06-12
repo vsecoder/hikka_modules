@@ -51,12 +51,12 @@ class SpeechCensorshipMod(loader.Module):
                 "#",
                 lambda m: self.strings("_cfg_replace_symbols", m)
             ),
-            #loader.ConfigValue(
-            #    "language",
-            #    ["ru", "en"],
-            #    lambda m: self.strings("_cfg_language", m),
-            #    validator=loader.validators.MultiChoice(["ru", "en"])
-            #), # TODO: add language support, later
+            loader.ConfigValue(
+                "language",
+                ["ru", "en"],
+                lambda m: self.strings("_cfg_language", m),
+                validator=loader.validators.MultiChoice(["ru", "en"])
+            )
 
         )
         self.name = self.strings["name"]
@@ -73,8 +73,7 @@ class SpeechCensorshipMod(loader.Module):
         await utils.answer(message, self.strings("turn", message).format(work))
 
     async def censor_task(self, text):
-        #languages = self.config["language"]
-        languages = ["ru"]
+        languages = self.config["language"]
         replace_symbols = self.config["replace_symbols"]
 
         censors = [Censor.get(lang) for lang in languages]
