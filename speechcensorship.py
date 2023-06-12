@@ -79,7 +79,7 @@ class SpeechCensorshipMod(loader.Module):
         censors = [Censor.get(lang) for lang in languages]
 
         for censor in censors:
-            text = censor.clean_line(text, beep=replace_symbols)
+            text = censor.clean_line(text, beep=replace_symbols)[0]
 
         return text
 
@@ -95,7 +95,7 @@ class SpeechCensorshipMod(loader.Module):
         text = message.text
 
         if text:
-            censored = (await self.censor_task(text))[0]
+            censored = await self.censor_task(text)
 
             if text != censored:
                 await message.edit(censored)
