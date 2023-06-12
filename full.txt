@@ -19,3 +19,4 @@ shuploader
 vsecodertranslate
 wikimod
 ymnow
+speechcensorship
