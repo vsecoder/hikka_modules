@@ -22,7 +22,7 @@ from telethon.tl.types import (
     MessageEntityUnderline,
     MessageEntityUrl,
     TypeMessageEntity,
-    MessageEntityEmoji,
+    MessageEntityCustomEmoji,
 )
 
 from .. import loader
@@ -248,7 +248,7 @@ class HTMLParserLib(loader.Library):
                 else:
                     html.append("<pre><code>{}</code></pre>".format(entity_text))
             # @vsecoder append start
-            elif entity_type == MessageEntityEmoji:
+            elif entity_type == MessageEntityCustomEmoji:
                 html.append('<emoji document_id="{}">{}</emoji>'.format(entity.document_id, entity_text))
             # @vsecoder append end
             elif entity_type == MessageEntityEmail:
