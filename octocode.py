@@ -197,9 +197,11 @@ class OctoCodeMod(loader.Module):
                 return
 
             await utils.answer(message, self.strings("answer"))
-            await self._client.send_file(
+            await self._client.send_message(
                 utils.get_chat_id(message),
-                open("out.png", "rb"),
+                file=open("out.png", "rb"),
+                force_document=(len(args.splitlines()) > 50),
+                reply_to=getattr(message, "reply_to_msg_id", None),
             )
         except Exception as e:
             await utils.answer(message, self.strings("error").format(e))
