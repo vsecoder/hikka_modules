@@ -11,7 +11,7 @@
 """
 # meta developer: @vsecoder_m
 
-__version__ = (2, 0, 0)
+__version__ = (3, 0, 0)
 
 import os
 import logging
@@ -35,7 +35,7 @@ class HikkahostMod(loader.Module):
         "loading": "<emoji document_id=5841344801768738559>🔵</emoji> <b>In progress...</b>",
         "error": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Something went wrong</b>",
         "info": "<emoji document_id=5172441295100052110>💻</emoji> <b>Info:</b>",
-        "not_hikkahost": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Not hikkahost, please buy hosting</b>",
+        "not_hikkahost": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Not hikkahost, please buy hosting in @hikkahost_bot</b>",
     }
 
     strings_ru = {
@@ -46,7 +46,7 @@ class HikkahostMod(loader.Module):
         "loading": "<emoji document_id=5841344801768738559>🔵</emoji> <b>В процессе...</b>",
         "error": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Что-то пошло не так</b>",
         "info": "<emoji document_id=5172441295100052110>💻</emoji> <b>Инфо:</b>",
-        "not_hikkahost": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Not hikkahost, please buy hosting</b>",
+        "not_hikkahost": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Not hikkahost, please buy hosting in @hikkahost_bot</b>",
     }
 
     def __init__(self):
@@ -54,6 +54,7 @@ class HikkahostMod(loader.Module):
 
     async def client_ready(self, client, db):
         self.host = True
+
         if not "HIKKAHOST" in os.environ:
             self.host = False
             logger.error("Not hikkahost, please buy hosting")
