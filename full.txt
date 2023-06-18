@@ -20,3 +20,4 @@ vsecodertranslate
 wikimod
 ymnow
 speechcensorship
+hikkahost
