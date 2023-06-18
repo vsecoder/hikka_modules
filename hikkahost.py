@@ -35,6 +35,7 @@ class HikkahostMod(loader.Module):
         "loading": "<emoji document_id=5841344801768738559>🔵</emoji> <b>In progress...</b>",
         "error": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Something went wrong</b>",
         "info": "<emoji document_id=5172441295100052110>💻</emoji> <b>Info:</b>",
+        "not_hikkahost": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Not hikkahost, please buy hosting</b>",
     }
 
     strings_ru = {
@@ -45,14 +46,20 @@ class HikkahostMod(loader.Module):
         "loading": "<emoji document_id=5841344801768738559>🔵</emoji> <b>В процессе...</b>",
         "error": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Что-то пошло не так</b>",
         "info": "<emoji document_id=5172441295100052110>💻</emoji> <b>Инфо:</b>",
+        "not_hikkahost": "<emoji document_id=5843952899184398024>🚫</emoji> <b>Not hikkahost, please buy hosting</b>",
     }
 
     def __init__(self):
         self.name = self.strings["name"]
 
     async def client_ready(self, client, db):
+        self.host = True
         if not "HIKKAHOST" in os.environ:
-            return Exception("Not hikkahost, please buy hosting")
+            self.host = False
+            logger.error("Not hikkahost, please buy hosting")
+            await self.inline.bot.send_message(
+                "me", "Not hikkahost, please buy hosting"
+            )
 
         self._client = client
         self.me = await client.get_me()
@@ -75,6 +82,8 @@ class HikkahostMod(loader.Module):
         """
         - Start hikkahost
         """
+        if not self.host:
+            return await utils.answer(message, self.strings["not_hikkahost"])
         await utils.answer(message, self.strings["loading"])
         await self.get_response("/action start")
         await utils.answer(message, self.strings["start"])
@@ -83,6 +92,8 @@ class HikkahostMod(loader.Module):
         """
         - Stop hikkahost
         """
+        if not self.host:
+            return await utils.answer(message, self.strings["not_hikkahost"])
         await utils.answer(message, self.strings["loading"])
         await self.get_response("/action stop")
         await utils.answer(message, self.strings["stop"])
@@ -91,6 +102,8 @@ class HikkahostMod(loader.Module):
         """
         - Restart hikkahost
         """
+        if not self.host:
+            return await utils.answer(message, self.strings["not_hikkahost"])
         await utils.answer(message, self.strings["loading"])
         await self.get_response("/action restart")
         await utils.answer(message, self.strings["restart"])
@@ -99,6 +112,8 @@ class HikkahostMod(loader.Module):
         """
         - Get hikkahost logs
         """
+        if not self.host:
+            return await utils.answer(message, self.strings["not_hikkahost"])
         await utils.answer(message, self.strings["loading"])
         r = await self.get_response("/action logs", 3)
         if not r or not r.message:
