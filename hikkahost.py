@@ -11,7 +11,7 @@
 """
 # meta developer: @vsecoder_m
 
-__version__ = (3, 0, 0)
+__version__ = (4, 0, 0)
 
 import os
 import logging
@@ -59,7 +59,7 @@ class HikkahostMod(loader.Module):
             self.host = False
             logger.error("Not hikkahost, please buy hosting")
             await self.inline.bot.send_message(
-                "me", "Not hikkahost, please buy hosting"
+                self._tg_id, "Not hikkahost, please buy hosting"
             )
 
         self._client = client
