@@ -114,4 +114,4 @@ class HikkahostMod(loader.Module):
             return await utils.answer(message, self.strings["error"])
 
         await utils.answer(message, self.strings["info"])
-        await query[0].click(message.to_id, silent=True)
+        await query[0].click(utils.get_chat_id(message), message.reply_to_msg_id)
