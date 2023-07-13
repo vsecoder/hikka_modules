@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/cute-clipart/344/wikipedia.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/cute-clipart/344/wikipedia.png&title=Wikipedia&description=Module%20for%20wikipedia%20search
 
 __version__ = (1, 0, 0)
 

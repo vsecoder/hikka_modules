@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/office/344/administrator-male--v1.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/office/344/administrator-male--v1.png&title=Profilemod&description=Telegram%20Profile%20Statistic
 
 __version__ = (0, 0, 1)
 
@@ -29,9 +30,7 @@ logger = logging.getLogger(__name__)
 class Profilemod(loader.Module):
     """Module for get beautiful picture profile statistic"""
 
-    strings = {
-        "name": "Profilemod"
-    }
+    strings = {"name": "Profilemod"}
 
     def __init__(self):
         self.config = loader.ModuleConfig(

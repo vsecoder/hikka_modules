@@ -12,6 +12,7 @@
 
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/fluency/344/pen-1.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/fluency/344/pen-1.png&title=FormatterMod&description=Module%20for%20prettifying%20the%20formatting%20of%20messages
 
 __version__ = (1, 0, 1)
 
@@ -58,7 +59,8 @@ class FormatterMod(loader.Module):
         self._client = client
         self.me = await client.get_me()
         self.html = await self.import_lib(
-            "https://raw.githubusercontent.com/vsecoder/hikka_modules/main/libs/html2.py", suspend_on_error=True
+            "https://raw.githubusercontent.com/vsecoder/hikka_modules/main/libs/html2.py",
+            suspend_on_error=True,
         )
 
     async def watcher(self, message: Message):

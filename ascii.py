@@ -12,6 +12,7 @@
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/color/344/asc.png
 # requires: Pillow
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/color/344/asc.png&title=AsciiMod&description=Module%20for%20convert%20image%20to%20ascii
 
 __version__ = (0, 0, 1)
 

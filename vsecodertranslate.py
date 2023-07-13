@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/344/external-translate-online-learning-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/344/external-translate-online-learning-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png&title=VsecoderTranlate&description=Telegram%20Translate%20Bot
 
 __version__ = (2, 2, 1)
 
@@ -23,7 +24,6 @@ logger = logging.getLogger(__name__)
 
 @loader.tds
 class VseTranslateMod(loader.Module):
-
     strings = {
         "name": "💠 Vsecoder Translate",
         "invalid_args": "📥 Invalid arguments!",

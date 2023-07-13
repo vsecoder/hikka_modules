@@ -16,7 +16,8 @@ __version__ = (2, 1, 1)
 # meta developer: @vsecoder_m
 # requires: git+https://github.com/MarshalX/yandex-music-api@dev aiohttp
 # meta desc: Module for yandex music. Based on SpotifyNow, YaNow and WakaTime
-
+# meta pic: https://img.freepik.com/premium-vector/yandex-music-logo_578229-242.jpg
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.freepik.com/premium-vector/yandex-music-logo_578229-242.jpg&title=YMNow&description=Module%20for%20yandex%20music
 
 import asyncio
 import logging
@@ -174,7 +175,7 @@ class YmNowMod(loader.Module):
                         self.config["AutoMessageTemplate"].format(
                             f"{artists} - {title}"
                             + (f" ({last_track.version})" if last_track.version else "")
-                        )
+                        ),
                     )
                 except MessageNotModifiedError:
                     pass

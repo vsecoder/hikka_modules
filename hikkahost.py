@@ -10,6 +10,8 @@
 
 """
 # meta developer: @vsecoder_m
+# meta pic: https://hikkahost.tech/logo.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://hikkahost.tech/logo.png&title=HikkahostMod&description=Hikkahost%20manager,%20buy%20hosting:%20@hikkahost_bot
 
 __version__ = (4, 0, 0)
 

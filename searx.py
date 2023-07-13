@@ -15,7 +15,8 @@
 import contextlib
 
 # meta developer: @vsecoder_m
-# meta pic: https://img.icons8.com/avantgarde/344/experimental-search-avantgarde.png
+# meta pic: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCO9v08B8wLGwL4UMxZzlf7tNOvsRvWQjMypjq5uyvxhAa03NbOO40DY1m-Rr4aYeK7WE&usqp=CAU
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCO9v08B8wLGwL4UMxZzlf7tNOvsRvWQjMypjq5uyvxhAa03NbOO40DY1m-Rr4aYeK7WE&usqp=CAU&title=SearX&description=Telegram%20SearX%20Engine
 
 
 __version__ = (1, 0, 1)

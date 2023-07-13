@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/external-filled-outline-wichaiwi/344/external-page-uxui-design-filled-outline-wichaiwi.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/external-filled-outline-wichaiwi/344/external-page-uxui-design-filled-outline-wichaiwi.png&title=BioPage&description=Module%20for%20create%20bio%20page
 
 __version__ = (2, 0, 0)
 
@@ -89,5 +90,6 @@ class BioPageMod(loader.Module):
         self.config["toggle"] = not self.config["toggle"]
         await self.bot_conifg()
         await utils.answer(
-            message, self.strings["answer"].format("on" if self.config["toggle"] else "off")
+            message,
+            self.strings["answer"].format("on" if self.config["toggle"] else "off"),
         )

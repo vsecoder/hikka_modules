@@ -14,6 +14,7 @@ import contextlib
 
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/color/344/antivirus-scanner--v1.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/color/344/antivirus-scanner--v1.png&title=Check%20module&description=Module%20for%20check%20modules
 
 __version__ = (3, 3, 0)
 

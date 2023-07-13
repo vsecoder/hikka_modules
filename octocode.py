@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/cotton/344/code.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/cotton/344/code.png&title=OctoCode&description=OctoCode%20is%20a%20module%20for%20octopussed%20code%20in%20Telegram
 
 __version__ = (2, 0, 0)
 
@@ -120,7 +121,9 @@ class OctoCodeMod(loader.Module):
                 "theme",
                 "monokai",
                 lambda m: self.strings("cfg_theme", m),
-                validator=loader.validators.Choice(["monokai", "zenburn", "material", "dark"]),
+                validator=loader.validators.Choice(
+                    ["monokai", "zenburn", "material", "dark"]
+                ),
             ),
             loader.ConfigValue(
                 "line_numbers",

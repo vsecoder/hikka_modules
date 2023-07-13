@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/color/256/kakashi-hatake.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/color/256/kakashi-hatake.png&title=MangaSlider&description=Read%20manga%20in%20Telegram%20%F0%9F%91%8D
 
 __version__ = (2, 0, 1)
 
@@ -26,7 +27,6 @@ logger = logging.getLogger(__name__)
 
 @loader.tds
 class MangaSliderMod(loader.Module):
-
     strings = {"name": "MangaSlider"}
 
     async def client_ready(self):
@@ -38,35 +38,35 @@ class MangaSliderMod(loader.Module):
         )
 
     async def requests(self, data):
-        _api = 'https://api.newmanga.org/'
-        _storage = 'https://storage.newmanga.org/'
+        _api = "https://api.newmanga.org/"
+        _storage = "https://storage.newmanga.org/"
 
-        _all_chapters = _api + 'v3/branches/{}/chapters/all' # paste manga id
-        _all_pages = _api + 'v3/chapters/{}/pages' # paste chapter id
+        _all_chapters = _api + "v3/branches/{}/chapters/all"  # paste manga id
+        _all_pages = _api + "v3/chapters/{}/pages"  # paste chapter id
 
-        _image = _storage + 'origin_proxy/{}/{}/{}' # paste disk name, chapter id and file name
+        _image = (
+            _storage + "origin_proxy/{}/{}/{}"
+        )  # paste disk name, chapter id and file name
 
-        chapters = requests.get(_all_chapters.format(data['name'])).json()
-        charapter = chapters[data['chapter']]
-        charapter_id = charapter['id']
-        disk = charapter['origin']
-        tom = charapter['tom']
-        pages_count = charapter['pages']
+        chapters = requests.get(_all_chapters.format(data["name"])).json()
+        charapter = chapters[data["chapter"]]
+        charapter_id = charapter["id"]
+        disk = charapter["origin"]
+        tom = charapter["tom"]
+        pages_count = charapter["pages"]
 
-        if data['page'] > pages_count:
-            return {
-                "error": "❗️ Это последняя страница"
-            }
+        if data["page"] > pages_count:
+            return {"error": "❗️ Это последняя страница"}
 
         pages = requests.get(_all_pages.format(charapter_id)).json()
-        page = pages['pages'][data['page']]['slices'][0]['path']
+        page = pages["pages"][data["page"]]["slices"][0]["path"]
 
         return {
             "image": _image.format(disk, charapter_id, page),
             "page": f"{data['page'] + 1}/{pages_count}",
             "chapter": f"{data['chapter'] + 1}/{len(chapters)}",
             "tom": tom,
-            "error": None
+            "error": None,
         }
 
     async def _markup(self, data):
@@ -87,7 +87,7 @@ class MangaSliderMod(loader.Module):
                         "text": "▶️ Следующая глава",
                         "data": f"manga/next_chapter/{data['name']}/{data['page']}/{data['chapter']}",
                     }
-                ]
+                ],
             ]
         )
 
@@ -96,12 +96,12 @@ class MangaSliderMod(loader.Module):
             if message.text == "/start manga":
                 await self.inline.bot.send_message(
                     self._tg_id,
-"""
+                    """
 👨‍💻 <b>Привет, чтобы продолжить введи <code>/read</code> с параметром - номером манги, который можно получить с сайта https://newmanga.org, пример:</b>
 
  ▪️ Клинок, рассекающий демонов - https://newmanga.org/p/blade-of-demon-destruction/<code>4774</code>/r/85016
  Для чтения манги введите команду <code>/read 4774</code> что бы начать с первой главы
-"""
+""",
                 )
             elif message.text.split(" ")[0] == "/read":
                 args = message.text.split(" ")
@@ -126,7 +126,7 @@ class MangaSliderMod(loader.Module):
     async def feedback_callback_handler(self, call: InlineCall):
         if not call.data.startswith("manga"):
             return
-        
+
         args = call.data.replace("manga/", "").split("/")
 
         data = {
@@ -157,6 +157,6 @@ class MangaSliderMod(loader.Module):
         text = f"<b>📚 Том</b>: {r['tom']}\n<b>📙 Глава:</b> {r['chapter']}\n<b>📄 Страница:</b> {r['page']}"
 
         await self.inline.bot.send_photo(
-            self._tg_id, r['image'], text, reply_markup=_markup
+            self._tg_id, r["image"], text, reply_markup=_markup
         )
         await self.inline.bot.delete_message(self._tg_id, call.message.message_id)

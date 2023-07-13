@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/fluency/344/feedback.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/fluency/344/feedback.png&title=Feedback&description=Feedback%20bot%20for%20Hikka%20modules
 
 __version__ = (3, 0, 1)
 
@@ -25,7 +26,6 @@ logger = logging.getLogger(__name__)
 
 @loader.tds
 class FeedbackBotMod(loader.Module):
-
     strings = {
         "name": "📥 Feedback",
         "start": "✌️ Hi, I'm feedback bot as {}",

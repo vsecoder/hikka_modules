@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/bubbles/344/google-logo.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/bubbles/344/google-logo.png&title=GoogleIT&description=Google%20search%20module%20for%20userbot
 
 __version__ = (2, 0, 0)
 

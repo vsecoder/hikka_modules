@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/fluency/344/timer.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/fluency/344/timer.png&title=Account%20Time&description=Get%20the%20account%20registration%20date%20and%20time!
 
 __version__ = (2, 5, 0)
 
@@ -55,7 +56,6 @@ class Function:
         self._func = self._fit_data()
 
     def _unpack_data(self) -> Tuple[list, list]:
-
         x_data = np.array(list(map(int, data.keys())))
         y_data = np.array(list(data.values()))
 

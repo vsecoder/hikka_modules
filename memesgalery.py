@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/ios/344/angry-face-meme.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/ios/344/angry-face-meme.png&title=MemsGalery&description=Sends%20meme%20pictures
 
 
 import random

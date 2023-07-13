@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/color/344/calculate.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/color/344/calculate.png&title=Calc&description=Module%20for%20inline%20calc
 
 __version__ = (2, 0, 0)
 

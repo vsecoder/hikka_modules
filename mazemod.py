@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/external-icongeek26-linear-colour-icongeek26/344/external-maze-game-development-icongeek26-linear-colour-icongeek26.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/external-icongeek26-linear-colour-icongeek26/344/external-maze-game-development-icongeek26-linear-colour-icongeek26.png&title=MazeMod&description=Telegram%20Maze%20Game
 
 __version__ = (2, 0, 0)
 

@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-roulette-casino-flaticons-lineal-color-flat-icons-3.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-roulette-casino-flaticons-lineal-color-flat-icons-3.png&title=Russian%20roulette&description=Telegram%20Russian%20roulette%20game
 
 __version__ = (2, 3, 2)
 

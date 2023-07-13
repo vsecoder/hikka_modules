@@ -11,6 +11,7 @@
 """
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/bubbles/344/google-logo.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/bubbles/344/google-logo.png&title=LMFIFY&description=Let%20me%20find%20it%20for%20you%20in%20Google%20/%20Yandex
 
 __version__ = (2, 0, 0)
 
