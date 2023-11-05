@@ -160,11 +160,6 @@ class YmNowMod(loader.Module):
             await client(JoinChannelRequest(channel))
         except Exception:
             logger.error("Can't join vsecoder_m")
-        try:
-            post = (await client.get_messages("@vsecoder_m", ids=[314]))[0]
-            await post.react("👍")
-        except Exception:
-            logger.error("Can't react to t.me/vsecoder_m")
 
     async def _parse(self, do_not_loop: bool = False):
         while True:
@@ -217,7 +212,7 @@ class YmNowMod(loader.Module):
         self.set("state", state)
         await utils.answer(
             message,
-            self.strings("state").format(
+            self.strings["state"].format(
                 "on" if state else "off", self.strings("tutorial") if state else ""
             ),
         )
@@ -478,8 +473,8 @@ class YmNowMod(loader.Module):
                 self.get("widgets", []) + [(chat_id, message_id, message.text)],
             )
 
-            await utils.answer(message, self.strings("configuring"))
+            await utils.answer(message, self.strings["configuring"])
             await self._parse(do_not_loop=True)
         except Exception as e:
             logger.exception("Can't send widget")
-            await utils.answer(message, self.strings("error").format(e))
+            await utils.respond(message, self.strings["error"].format(e))

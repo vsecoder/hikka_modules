@@ -83,11 +83,6 @@ class AsciiMod(loader.Module):
             await client(JoinChannelRequest(channel))
         except Exception:
             logger.error("Can't join vsecoder_m")
-        try:
-            post = (await client.get_messages("@vsecoder_m", ids=[310]))[0]
-            await post.react("👍")
-        except Exception:
-            logger.error("Can't react to t.me/vsecoder_m")
 
     @loader.unrestricted
     @loader.ratelimit

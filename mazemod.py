@@ -163,11 +163,6 @@ class MazeModMod(loader.Module):
             await client(JoinChannelRequest(channel))
         except Exception:
             logger.error("Can't join vsecoder_m")
-        try:
-            post = (await client.get_messages("@vsecoder_m", ids=[304]))[0]
-            await post.react("👍")
-        except Exception:
-            logger.error("Can't react to t.me/vsecoder_m")
 
     async def render(self, message: InlineCall, press, maze, player):
         text = self.strings["answer"].format(self.strings["not_allowed"])

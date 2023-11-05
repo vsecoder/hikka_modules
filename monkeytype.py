@@ -15,7 +15,7 @@
 # meta pic: https://img.icons8.com/stickers/100/keyboard.png
 # meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/stickers/100/keyboard.png&title=MonkeyType&description=Module%20for%20getting%20information%20about%20monkeytype.com%20stats
 
-__version__ = (1, 0, 0)
+__version__ = (1, 0, 1)
 
 import logging
 import aiohttp
@@ -40,7 +40,7 @@ class MonkeyTypeMod(loader.Module):
         "error": "<emoji document_id=5467928559664242360>❗️</emoji> Error: \n{}",
         "loading": "<emoji document_id=5451732530048802485>⏳</emoji> Loading...",
         "template_message": (
-            "<blockquote><emoji document_id=5879770735999717115>👤</emoji> <b>MonkeyType<a href='https://raw.githubusercontent.com/vsecoder/hikka_modules/main/assets/fone.jpg'>.</a>com stats for {}:</b></blockquote>\n\n"
+            "<blockquote><emoji document_id=5879770735999717115>👤</emoji> <b>MonkeyType.com stats for {}:</b></blockquote>\n\n"
             "<emoji document_id=5877485980901971030>📊</emoji> Completed tests: <code>{}</code>\n"
             "<emoji document_id=5778202206922608769>🔄</emoji> All time typing: <code>{}s</code>\n\n"
             "<emoji document_id=5870684638195748414>🏆</emoji> <b>Personal bests:</b>\n"
@@ -51,7 +51,7 @@ class MonkeyTypeMod(loader.Module):
         "not_time": "  <emoji document_id=5960751816084820359>⏲️</emoji> <i>{}s</i>: -\n\n",
         "template_time": (
             "  <emoji document_id=5100434699503797219>🟠</emoji><code>{}</code>:\n"
-            "    <emoji document_id=5098279308821005089>🔵</emoji> WPM: <code>{}</code>\n"
+            "    <emoji document_id=5098279308821005089>🔵</emoji> {}: <code>{}</code>\n"
             "    <emoji document_id=5098279308821005089>🔵</emoji> Accuracy: <code>{}%</code>\n"
             "    <emoji document_id=5098279308821005089>🔵</emoji> Consistency: <code>{}%</code>\n"
             "    <emoji document_id=5098279308821005089>🔵</emoji> Difficulty: <code>{}</code>\n\n"
@@ -65,6 +65,15 @@ class MonkeyTypeMod(loader.Module):
 
     def __init__(self):
         self.name = self.strings["name"]
+
+        self.config = loader.ModuleConfig(
+            loader.ConfigValue(
+                "default_typing_speed",
+                "wpm",
+                "Which typing speed to use by default",
+                validator=loader.validators.Choice(["cps", "wpm", "cpm", "wps"]),
+            ),
+        )
 
     async def request(self, username=""):
         url = "https://api.monkeytype.com/users/{}/profile"
@@ -116,9 +125,19 @@ class MonkeyTypeMod(loader.Module):
         if time in data["personalBests"]["time"]:
             best += self.strings["time"].format(time)
             for i in data["personalBests"]["time"][time]:
+                typing_speeds = {
+                    "wpm": 1,
+                    "cpm": 5,
+                    "wps": 1 / 60,
+                    "cps": 5 / 60,
+                }
+                speed = round(
+                    i["wpm"] * typing_speeds[self.config["default_typing_speed"]], 2
+                )
                 best += self.strings["template_time"].format(
                     i["language"],
-                    i["wpm"],
+                    self.config["default_typing_speed"].upper(),
+                    speed,
                     i["acc"],
                     i["consistency"],
                     i["difficulty"],
@@ -129,7 +148,7 @@ class MonkeyTypeMod(loader.Module):
         answer = self.strings["template_message"].format(
             args[0],
             data["typingStats"]["completedTests"],
-            data["typingStats"]["timeTyping"],
+            round(data["typingStats"]["timeTyping"]),
             best,
             data["xp"],
         )

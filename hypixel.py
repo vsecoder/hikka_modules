@@ -163,11 +163,6 @@ class HypixelMod(loader.Module):
             await client(JoinChannelRequest(channel))
         except Exception:
             logger.error("Can't join vsecoder_m")
-        # try:
-        #    post = (await client.get_messages("@vsecoder_m", ids=[314]))[0]
-        #    await post.react("👍")
-        # except Exception:
-        #    logger.error("Can't react to t.me/vsecoder_m")
 
     @loader.command()
     async def statcmd(self, message: Message):

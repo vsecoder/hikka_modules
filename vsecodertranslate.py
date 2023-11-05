@@ -72,11 +72,6 @@ class VseTranslateMod(loader.Module):
             await client(JoinChannelRequest(channel))
         except Exception:
             logger.error("Can't join vsecoder_m")
-        try:
-            post = (await client.get_messages("@vsecoder_m", ids=[308]))[0]
-            await post.react("👍")
-        except Exception:
-            logger.error("Can't react to t.me/vsecoder_m")
 
     async def translate(
         self,
@@ -84,7 +79,7 @@ class VseTranslateMod(loader.Module):
         lang_from: str = "auto",
         lang_to: str = "ru",
         translator: str = "google",
-    ) -> dict or str:
+    ) -> dict:
         translators = {
             "google": vt.google,
             "yandex": vt.yandex,
@@ -93,7 +88,7 @@ class VseTranslateMod(loader.Module):
         }
 
         if translator not in translators:
-            return self.strings["invalid_translator"]
+            return {"error": self.strings["invalid_translator"]}
 
         translater = translators[translator]
         return {
