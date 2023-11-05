@@ -90,7 +90,7 @@ class AnimeChanMod(loader.Module):
         except Exception:
             logger.error("Can't join vsecoder_m")
         try:
-            post = (await client.get_messages("@vsecoder_m", ids=[322]))[0]
+            post = (await client.get_messages("@vsecoder_m", ids=[323]))[0]
             await post.react("👍")
         except Exception:
             logger.error("Can't react to t.me/vsecoder_m")
