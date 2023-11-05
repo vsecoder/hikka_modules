@@ -61,6 +61,23 @@ class MonkeyTypeMod(loader.Module):
     strings_ru = {
         "error": "<emoji document_id=5467928559664242360>❗️</emoji> Ошибка: \n{}",
         "loading": "<emoji document_id=5451732530048802485>⏳</emoji> Загрузка...",
+        "template_message": (
+            "<blockquote><emoji document_id=5879770735999717115>👤</emoji> <b>Статистика MonkeyType.com для {}:</b></blockquote>\n\n"
+            "<emoji document_id=5877485980901971030>📊</emoji> Пройденных тестов: <code>{}</code>\n"
+            "<emoji document_id=5778202206922608769>🔄</emoji> Всего времени печати: <code>{}s</code>\n\n"
+            "<emoji document_id=5870684638195748414>🏆</emoji> <b>Лучшие результаты:</b>\n"
+            "{}"
+            "<emoji document_id=5994378914636500516>📈</emoji> <b>XP</b>: <code>{}</code>"
+        ),
+        "time": "  <emoji document_id=5960751816084820359>⏲️</emoji> <i>{}s</i>: \n",
+        "not_time": "  <emoji document_id=5960751816084820359>⏲️</emoji> <i>{}s</i>: -\n\n",
+        "template_time": (
+            "  <emoji document_id=5100434699503797219>🟠</emoji><code>{}</code>:\n"
+            "    <emoji document_id=5098279308821005089>🔵</emoji> {}: <code>{}</code>\n"
+            "    <emoji document_id=5098279308821005089>🔵</emoji> Точность: <code>{}%</code>\n"
+            "    <emoji document_id=5098279308821005089>🔵</emoji> Согласованность: <code>{}%</code>\n"
+            "    <emoji document_id=5098279308821005089>🔵</emoji> Сложность: <code>{}</code>\n\n"
+        ),
     }
 
     def __init__(self):
