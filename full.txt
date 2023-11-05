@@ -10,15 +10,14 @@ googleit
 lmfify
 MangaSlider
 mazemod
-memesgalery
 octocode
 profile
 RussianRoulette
 searx
-shuploader
 vsecodertranslate
 wikimod
 ymnow
 speechcensorship
 hikkahost
 animechan
+hypixel
