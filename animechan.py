@@ -101,6 +101,16 @@ class AnimeChanMod(loader.Module):
         """
         args = utils.get_args_raw(message).split(" ", 1)
 
+        if len(args) < 1:
+            return await utils.answer(
+                message, self.strings["error"].format("Invalid args")
+            )
+
+        if not args[0].isdigit():
+            return await utils.answer(
+                message, self.strings["error"].format("Invalid args")
+            )
+
         await utils.answer(message, self.strings["loading"])
 
         result = await self.request() if len(args) == 1 else await self.request(args[1])
