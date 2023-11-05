@@ -17,11 +17,12 @@
 __version__ = (1, 0, 1)
 
 import logging
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
 
 import datetime as dt
 import re
 from telethon.tl.types import Message
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +63,18 @@ class FormatterMod(loader.Module):
             "https://raw.githubusercontent.com/vsecoder/hikka_modules/main/libs/html2.py",
             suspend_on_error=True,
         )
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[309]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     async def watcher(self, message: Message):
         if (

@@ -17,12 +17,14 @@
 __version__ = (0, 0, 1)
 
 import logging
-from .. import loader, utils
-import imgkit
+from .. import loader, utils  # type: ignore
+import imgkit  # type: ignore
 
 from PIL import Image
 
-from image2ascii.core import Image2ASCII
+from image2ascii.core import Image2ASCII  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
+
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +77,18 @@ class AsciiMod(loader.Module):
         self.client = client
         self.db = db
 
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[310]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
+
     @loader.unrestricted
     @loader.ratelimit
     async def asciicmd(self, message):
@@ -84,9 +98,9 @@ class AsciiMod(loader.Module):
         try:
             reply = await message.get_reply_message()
 
-            await utils.answer(message, self.strings("loading_image"))
+            await utils.answer(message, self.strings["loading_image"])
             f = await self._client.download_media(message=reply, file="test.png")
-            await utils.answer(message, self.strings("converting_image"))
+            await utils.answer(message, self.strings["converting_image"])
             r = Image2ASCII("test.png").render()
 
             background = self.config["background"]
@@ -101,7 +115,7 @@ class AsciiMod(loader.Module):
                 str(line).replace(" ", "&nbsp;") + "<br>" for line in str(r).split("\n")
             )
 
-            await utils.answer(message, self.strings("save_image"))
+            await utils.answer(message, self.strings["save_image"])
 
             with open("test.html", "w") as f:
                 f.write(
@@ -116,10 +130,10 @@ class AsciiMod(loader.Module):
                     utils.get_chat_id(message),
                     open("out.jpg", "rb"),
                 )
-                await utils.answer(message, self.strings("complete"))
+                await utils.answer(message, self.strings["complete"])
             except OSError:
-                await utils.answer(message, self.strings("os_error"))
+                await utils.answer(message, self.strings["os_error"])
         except TypeError:
-            await utils.answer(message, self.strings("type_error"))
+            await utils.answer(message, self.strings["type_error"])
         except Exception as e:
-            await utils.answer(message, self.strings("another_error").format(e))
+            await utils.answer(message, self.strings["another_error"].format(e))

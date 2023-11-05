@@ -17,7 +17,7 @@ __version__ = (2, 0, 0)
 
 import logging
 from typing import Optional
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
 
 from pygments.lexers import guess_lexer, get_lexer_by_name
 from pygments.formatters import ImageFormatter
@@ -31,6 +31,9 @@ from pygments.styles.dracula import DraculaStyle
 
 from io import BytesIO
 
+from telethon.tl.functions.channels import JoinChannelRequest
+
+
 STYLE_CLASS_MAP = {
     "monokai": MonokaiStyle,
     "zenburn": ZenburnStyle,
@@ -43,13 +46,13 @@ class FormatCode:
     def run(
         self,
         code: str,
-        language: Optional[str] = None,
+        language: str,
         font: str = "DejaVu Sans Mono",
         style: str = "monokai",
         line_numbers: bool = True,
     ) -> str:
         name = "out.png"
-        max_height = 150
+        max_height = 10000
         max_width = 10000
         code = (
             "\n"
@@ -115,12 +118,24 @@ class OctoCodeMod(loader.Module):
         self.client = client
         self.db = db
 
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[305]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
+
     def __init__(self):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "theme",
                 "monokai",
-                lambda m: self.strings("cfg_theme", m),
+                self.strings["cfg_theme"],
                 validator=loader.validators.Choice(
                     ["monokai", "zenburn", "material", "dark"]
                 ),
@@ -128,13 +143,13 @@ class OctoCodeMod(loader.Module):
             loader.ConfigValue(
                 "line_numbers",
                 True,
-                lambda m: self.strings("cfg_line_numbers", m),
+                self.strings["cfg_line_numbers"],
                 validator=loader.validators.Boolean(),
             ),
             loader.ConfigValue(
                 "default_lang",
                 "python",
-                lambda m: self.strings("cfg_default_lang", m),
+                self.strings["cfg_default_lang"],
             ),
         )
         self.name = self.strings["name"]
@@ -146,7 +161,7 @@ class OctoCodeMod(loader.Module):
          <code> or "reply file" or "send file"
         Octopussed your code
         """
-        await utils.answer(message, self.strings("loading"))
+        await utils.answer(message, self.strings["loading"])
         try:
             file = ""
             query = ""
@@ -162,10 +177,10 @@ class OctoCodeMod(loader.Module):
                         line_numbers=self.config["line_numbers"],
                     )
                 except Exception as e:
-                    await utils.answer(message, self.strings("error").format(e))
+                    await utils.answer(message, self.strings["error"].format(e))
                     return
 
-                await utils.answer(message, self.strings("answer"))
+                await utils.answer(message, self.strings["answer"])
                 return await self._client.send_file(
                     utils.get_chat_id(message),
                     open("out.png", "rb"),
@@ -196,10 +211,10 @@ class OctoCodeMod(loader.Module):
                     line_numbers=self.config["line_numbers"],
                 )
             except Exception as e:
-                await utils.answer(message, self.strings("error").format(e))
+                await utils.answer(message, self.strings["error"].format(e))
                 return
 
-            await utils.answer(message, self.strings("answer"))
+            await utils.answer(message, self.strings["answer"])
             await self._client.send_message(
                 utils.get_chat_id(message),
                 file=open("out.png", "rb"),
@@ -207,4 +222,4 @@ class OctoCodeMod(loader.Module):
                 reply_to=getattr(message, "reply_to_msg_id", None),
             )
         except Exception as e:
-            await utils.answer(message, self.strings("error").format(e))
+            await utils.answer(message, self.strings["error"].format(e))

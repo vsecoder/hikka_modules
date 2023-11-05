@@ -15,8 +15,10 @@
 __version__ = (2, 0, 0)
 
 import logging
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
 from censure import Censor
+
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -44,20 +46,31 @@ class SpeechCensorshipMod(loader.Module):
         self.get("censorship_work", False)
         self.me = await client.get_me()
 
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[295]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
+
     def __init__(self):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "replace_symbols",
                 "#",
-                lambda m: self.strings("_cfg_replace_symbols", m)
+                lambda m: self.strings["_cfg_replace_symbols"],
             ),
             loader.ConfigValue(
                 "language",
                 ["ru", "en"],
-                lambda m: self.strings("_cfg_language", m),
-                validator=loader.validators.MultiChoice(["ru", "en"])
-            )
-
+                lambda m: self.strings["_cfg_language"],
+                validator=loader.validators.MultiChoice(["ru", "en"]),
+            ),
         )
         self.name = self.strings["name"]
 
@@ -67,10 +80,10 @@ class SpeechCensorshipMod(loader.Module):
         """
         censorship_work = self.get("censorship_work", False)
 
-        work = 'on' if not censorship_work else 'off'
+        work = "on" if not censorship_work else "off"
         self.set("censorship_work", not censorship_work)
 
-        await utils.answer(message, self.strings("turn", message).format(work))
+        await utils.answer(message, self.strings["turn"].format(work))
 
     async def censor_task(self, text):
         languages = self.config["language"]

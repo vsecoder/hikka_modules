@@ -21,3 +21,4 @@ wikimod
 ymnow
 speechcensorship
 hikkahost
+animechan

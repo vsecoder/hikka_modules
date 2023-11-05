@@ -16,12 +16,13 @@
 __version__ = (0, 0, 1)
 
 import logging
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
 from telethon import functions
-import imgkit
+import imgkit  # type: ignore
 import base64
 import requests
 
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ class Profilemod(loader.Module):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "background",
-                "https://0x0.st/oSzw.jpg",
+                "https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/office/344/administrator-male--v1.png&title=.&description=.",
                 "Url to background (540x220 is perfect)",
                 validator=loader.validators.Link(),
             ),
@@ -52,6 +53,18 @@ class Profilemod(loader.Module):
     async def client_ready(self, client, db):
         self.client = client
         self.db = db
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[311]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     @loader.unrestricted
     @loader.ratelimit

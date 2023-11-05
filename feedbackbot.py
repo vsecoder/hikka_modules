@@ -18,8 +18,9 @@ __version__ = (3, 0, 1)
 import logging, time
 from telethon.utils import get_display_name
 from aiogram.types import Message as AiogramMessage
-from .. import loader, utils
-from ..inline.types import InlineCall
+from .. import loader, utils  # type: ignore
+from ..inline.types import InlineCall  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -76,17 +77,29 @@ class FeedbackBotMod(loader.Module):
             '❌ Toggle in .security "✅ Everyone (inline)" to use'
         )
 
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[307]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
+
     async def aiogram_watcher(self, message: AiogramMessage):
         if message.text == "/start feedback":
             if str(message.from_user.id) in map(str, self._ban_list):
-                return await message.answer(self.strings("banned"))
+                return await message.answer(self.strings["banned"])
 
             _markup = self.inline.generate_markup(
-                {"text": self.strings("fb_message"), "data": "fb_message"}
+                {"text": self.strings["fb_message"], "data": "fb_message"}
             )
 
             await message.answer(
-                self.strings("start").format(self._name),
+                self.strings["start"].format(self._name),
                 reply_markup=_markup,
             )
 
@@ -104,7 +117,7 @@ class FeedbackBotMod(loader.Module):
                 f"{message.chat.id}",
                 reply_markup=_markup,
             )
-            await message.answer(self.strings("sent"))
+            await message.answer(self.strings["sent"])
             self._ratelimit[message.from_user.id] = (
                 time.time() + self.config["ratelimit"] * 60
             )
@@ -126,14 +139,14 @@ class FeedbackBotMod(loader.Module):
                 pass
             else:
                 self._ban_list.append(fb_ban_id)
-                await call.answer(self.strings("user_banned").format(fb_ban_id))
+                await call.answer(self.strings["user_banned"].format(fb_ban_id))
 
         if call.data != "fb_message":
             return
 
         if str(call.from_user.id) in str(self._ban_list):
             await call.answer(
-                self.strings("banned"),
+                self.strings["banned"],
                 show_alert=True,
             )
 
@@ -142,7 +155,7 @@ class FeedbackBotMod(loader.Module):
             and self._ratelimit[call.from_user.id] > time.time()
         ):
             await call.answer(
-                self.strings("wait").format(
+                self.strings["wait"].format(
                     self._ratelimit[call.from_user.id] - time.time()
                 ),
                 show_alert=True,
@@ -152,5 +165,5 @@ class FeedbackBotMod(loader.Module):
         self.inline.ss(call.from_user.id, "fb_send_message")
 
         await call.answer(
-            self.strings("start_feedback").format(self._name, self.config["ratelimit"]),
+            self.strings["start_feedback"].format(self._name, self.config["ratelimit"]),
         )

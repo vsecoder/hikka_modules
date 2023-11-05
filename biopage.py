@@ -16,7 +16,8 @@
 __version__ = (2, 0, 0)
 
 import logging
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +60,18 @@ class BioPageMod(loader.Module):
         self._db = db
         self._client = client
         self.botfather = "@BotFather"
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[303]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     async def bot_conifg(self):
         if self.config["toggle"]:

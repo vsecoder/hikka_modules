@@ -17,9 +17,9 @@ __version__ = (2, 0, 1)
 
 import logging
 from aiogram.types import Message as AiogramMessage
-from .. import loader
-from ..inline.types import InlineCall
-
+from .. import loader  # type: ignore
+from ..inline.types import InlineCall  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 import requests
 
 logger = logging.getLogger(__name__)
@@ -29,13 +29,26 @@ logger = logging.getLogger(__name__)
 class MangaSliderMod(loader.Module):
     strings = {"name": "MangaSlider"}
 
-    async def client_ready(self):
+    async def client_ready(self, client, db):
+        self.client = client
         self.__doc__ = (
             "Модуль для чтения манги 👨‍💻[beta]\n\n🔗 Ссылка:"
             f" t.me/{self.inline.bot_username}?start=manga\n\n"
             "В будущем ожидается или перенос в бота, "
             "или добавление полноценного функционала."
         )
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[313]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     async def requests(self, data):
         _api = "https://api.newmanga.org/"

@@ -18,8 +18,9 @@ __version__ = (2, 0, 0)
 import logging
 import random
 from telethon import TelegramClient
-from .. import loader
-from ..inline.types import InlineCall
+from .. import loader  # type: ignore
+from ..inline.types import InlineCall  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +108,6 @@ class Maze:
             if self.isEven(column):
                 evenColums.append(column)
 
-        evenRows = [row for row in range(self.rowsNumber) if self.isEven(column)]
         startX = 2
         startY = 2
 
@@ -149,13 +149,25 @@ class MazeModMod(loader.Module):
         self.config = loader.ModuleConfig(
             "maze_width",
             "10",
-            lambda m: self.strings("cfg_maze_width", m),
+            self.strings["cfg_maze_width"],
         )
         self.name = self.strings["name"]
 
     async def client_ready(self, client: TelegramClient, db):
         self._db = db
         self._client = client
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[304]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     async def render(self, message: InlineCall, press, maze, player):
         text = self.strings["answer"].format(self.strings["not_allowed"])

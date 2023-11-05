@@ -16,8 +16,12 @@ version = (1, 0, 0)
 from telethon import functions
 from telethon.tl.types import Message
 import asyncio
+from telethon.tl.functions.channels import JoinChannelRequest
+import logging
 
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
+
+logger = logging.getLogger(__name__)
 
 
 @loader.tds
@@ -43,6 +47,18 @@ class ChatGPTfreeMod(loader.Module):
         self.client = client
         self.db = db
         self.gpt_free = "@Jarvis_IT_Assistant_bot"
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[280]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     async def message_q(
         self,
@@ -87,9 +103,13 @@ class ChatGPTfreeMod(loader.Module):
 
         await utils.answer(message, self.strings["loading"])
 
-        response = await self.message_q(args, self.gpt_free, mark_read=True, delete=True, ignore_answer=False)
+        response = await self.message_q(
+            args, self.gpt_free, mark_read=True, delete=True, ignore_answer=False
+        )
 
-        text = self.strings["start_text"] + response.text.replace("/context", "<code>.contextgpt</code>")
+        text = self.strings["start_text"] + response.text.replace(
+            "/context", "<code>.contextgpt</code>"
+        )
 
         return await utils.answer(message, text)
 
@@ -97,5 +117,7 @@ class ChatGPTfreeMod(loader.Module):
         """
         - сбросить диалог и начать новый
         """
-        await self.message_q("/context", self.gpt_free, mark_read=True, delete=True, ignore_answer=True)
+        await self.message_q(
+            "/context", self.gpt_free, mark_read=True, delete=True, ignore_answer=True
+        )
         return await utils.answer(message, self.strings["context_text"])

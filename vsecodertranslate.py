@@ -16,8 +16,9 @@
 __version__ = (2, 2, 1)
 
 import logging
-import translators as vt
-from .. import loader, utils
+import translators as vt  # type: ignore
+from .. import loader, utils  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -65,13 +66,25 @@ class VseTranslateMod(loader.Module):
     async def client_ready(self, client, _):
         self._client = client
 
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[308]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
+
     async def translate(
         self,
         text: str,
         lang_from: str = "auto",
         lang_to: str = "ru",
         translator: str = "google",
-    ) -> str:
+    ) -> dict or str:
         translators = {
             "google": vt.google,
             "yandex": vt.yandex,
@@ -80,7 +93,7 @@ class VseTranslateMod(loader.Module):
         }
 
         if translator not in translators:
-            return self.strings("invalid_translator")
+            return self.strings["invalid_translator"]
 
         translater = translators[translator]
         return {
@@ -101,7 +114,7 @@ class VseTranslateMod(loader.Module):
         text = message.text.replace(f"{self.get_prefix()}vsetranslate", "")
         t = ""
         if not args:
-            return await utils.answer(message, self.strings("invalid_args"))
+            return await utils.answer(message, self.strings["invalid_args"])
         if args[0] not in langs:  # .vsetranslate text
             t = await self.translate(
                 text,
@@ -141,7 +154,7 @@ class VseTranslateMod(loader.Module):
         try:
             await utils.answer(
                 message,
-                self.strings("answer").format(
+                self.strings["answer"].format(
                     t["translator"],
                     t["from"],
                     t["to"],
@@ -149,4 +162,4 @@ class VseTranslateMod(loader.Module):
                 ),
             )
         except Exception:
-            await utils.answer(message, self.strings("error"))
+            await utils.answer(message, self.strings["error"])

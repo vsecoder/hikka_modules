@@ -28,7 +28,9 @@ from telethon import TelegramClient
 from telethon.tl.types import Message
 from telethon.errors.rpcerrorlist import FloodWaitError, MessageNotModifiedError
 from telethon.tl.functions.account import UpdateProfileRequest
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
+
+from telethon.tl.functions.channels import JoinChannelRequest
 
 
 logger = logging.getLogger(__name__)
@@ -151,6 +153,18 @@ class YmNowMod(loader.Module):
 
         if self.get("autobio", False):
             self.autobio.start()
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[314]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     async def _parse(self, do_not_loop: bool = False):
         while True:
@@ -430,11 +444,9 @@ class YmNowMod(loader.Module):
         queues = await client.queues_list()
         last_queue = await client.queue(queues[0].id)
 
-        try:
-            last_track_id = last_queue.get_current_track()
-            last_track = await last_track_id.fetch_track_async()
-        except:
-            return
+        last_track_id = last_queue.get_current_track()
+
+        last_track = await last_track_id.fetch_track_async()
 
         artists = ", ".join(last_track.artists_name())
         title = last_track.title

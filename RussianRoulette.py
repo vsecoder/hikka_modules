@@ -18,8 +18,10 @@ __version__ = (2, 3, 2)
 import logging
 import asyncio
 import random
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
 from telethon import functions
+
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +56,7 @@ class RussianRouletteMod(loader.Module):
             loader.ConfigValue(
                 "real",
                 False,
-                self.strings("cfg_real"),
+                self.strings["cfg_real"],
                 validator=loader.validators.Link(),
             )
         )
@@ -63,6 +65,18 @@ class RussianRouletteMod(loader.Module):
     async def client_ready(self, client, db):
         self.client = client
         self.db = db
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[301]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     @loader.unrestricted
     @loader.ratelimit
@@ -75,9 +89,9 @@ class RussianRouletteMod(loader.Module):
             roulette.extend(0 for _ in range(7))
             result = random.choice(roulette)
             if result != 1:
-                await utils.answer(message, self.strings("answer"))
+                await utils.answer(message, self.strings["answer"])
             else:
-                await utils.answer(message, self.strings("answer2"))
+                await utils.answer(message, self.strings["answer2"])
                 await asyncio.sleep(3)
                 await utils.answer(message, "gg")
                 if self.config["real"]:
@@ -87,4 +101,4 @@ class RussianRouletteMod(loader.Module):
                         )
                     )
         except Exception:
-            await utils.answer(message, self.strings("error"))
+            await utils.answer(message, self.strings["error"])

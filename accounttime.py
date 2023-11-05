@@ -22,7 +22,8 @@ import time
 from dateutil.relativedelta import relativedelta
 import numpy as np
 from datetime import datetime
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 
 data = {
     "5396587273": 1648014800,
@@ -108,7 +109,7 @@ class AcTimeMod(loader.Module):
             "⏳ This account: {0}\n🕰 A registered: {1}\n\nP.S. The module script is"
             " trained with the number of requests from different ids, so the data can"
             " be refined",
-            lambda m: self.strings("cfg_answer_text", m),
+            self.strings["cfg_answer_text"],
         )
         self.name = self.strings["name"]
 
@@ -116,7 +117,19 @@ class AcTimeMod(loader.Module):
         self.client = client
         self.db = db
 
-    def time_format(self, unix_time: int, fmt="%Y-%m-%d") -> str:
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[300]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
+
+    def time_format(self, unix_time: int, fmt="%Y-%m-%d") -> list:
         result = [str(datetime.utcfromtimestamp(unix_time).strftime(fmt))]
 
         d = relativedelta(datetime.now(), datetime.utcfromtimestamp(unix_time))

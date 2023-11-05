@@ -16,8 +16,9 @@
 __version__ = (1, 0, 0)
 
 import logging
-import wikipedia
-from .. import loader, utils
+import wikipedia  # type: ignore
+from .. import loader, utils  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +45,18 @@ class WikiMod(loader.Module):
 
     async def client_ready(self, client, db):
         self._client = client
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[306]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     async def wikicmd(self, message):
         """

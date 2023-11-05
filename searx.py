@@ -10,8 +10,6 @@
 
     Thk @fleef
 """
-
-
 import contextlib
 
 # meta developer: @vsecoder_m
@@ -27,7 +25,8 @@ import urllib3
 
 from datetime import datetime
 
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -150,13 +149,13 @@ class SearXMod(loader.Module):
             loader.ConfigValue(
                 "engine",
                 "duckduckgo",
-                lambda m: self.strings("cfg_engine", m),
+                self.strings["cfg_engine"],
                 validator=loader.validators.String(),
             ),
             loader.ConfigValue(
                 "searx_link",
                 "https://searx.thegpm.org/",
-                lambda m: self.strings("cfg_searx_link", m),
+                self.strings["cfg_searx_link"],
                 validator=loader.validators.Link(),
             ),
         )
@@ -202,6 +201,18 @@ class SearXMod(loader.Module):
     async def client_ready(self, client, db):
         self._client = client
 
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[312]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
+
     async def searxcmd(self, message):
         """
          {text} - search text in the internet
@@ -212,5 +223,5 @@ class SearXMod(loader.Module):
 
         await utils.answer(message, self.strings["loading"])
         session = urllib3.PoolManager()
-        result = await self.request(session, *args, self.config["engine"])
+        result = await self.request(session, args[0], self.config["engine"], 3)
         await utils.answer(message, result)

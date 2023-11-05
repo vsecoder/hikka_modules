@@ -17,8 +17,8 @@ __version__ = (2, 0, 0)
 
 import logging
 from telethon import TelegramClient
-from .. import loader
-from ..inline.types import InlineCall
+from .. import loader  # type: ignore
+from ..inline.types import InlineCall  # type: ignore
 
 logger = logging.getLogger(__name__)
 

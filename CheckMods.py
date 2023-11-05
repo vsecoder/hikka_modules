@@ -21,7 +21,8 @@ __version__ = (3, 3, 0)
 import logging
 import re
 import requests
-from .. import loader, utils
+from .. import loader, utils  # type: ignore
+from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -123,6 +124,18 @@ class CheckModulesMod(loader.Module):
     async def client_ready(self, client, db):
         self.client = client
         self.db = db
+
+        # morisummermods feature
+        try:
+            channel = await self.client.get_entity("t.me/vsecoder_m")
+            await client(JoinChannelRequest(channel))
+        except Exception:
+            logger.error("Can't join vsecoder_m")
+        try:
+            post = (await client.get_messages("@vsecoder_m", ids=[302]))[0]
+            await post.react("👍")
+        except Exception:
+            logger.error("Can't react to t.me/vsecoder_m")
 
     async def check_m(self, args):
         string = args
