@@ -96,7 +96,9 @@ class FormatterMod(loader.Module):
 
         text = text.split("\n~\n")[0]
 
-        raw_cut_text = message.raw_text.split("\n~\n")[0]
+        """ Deleted because of bugs
+        raw_cut_text = message.raw_text.split("\n~\n")
+        logger.error(str(raw_cut_text))
 
         entities = self.html.parse(message.text)[1]
 
@@ -115,6 +117,7 @@ class FormatterMod(loader.Module):
                 )
 
         text = self.html.unparse(raw_cut_text, entities)
+        """
 
         formats = {
             "{now}": dt.datetime.now(),
