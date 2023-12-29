@@ -168,9 +168,9 @@ class YmNowMod(loader.Module):
 
                 await client.init()
                 queues = await client.queues_list()
-                last_queue = await client.queue(queues[0].id)
 
                 try:
+                    last_queue = await client.queue(queues[0].id)
                     last_track_id = last_queue.get_current_track()
                     last_track = await last_track_id.fetch_track_async()
                 except:
