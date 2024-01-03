@@ -1,4 +1,4 @@
-__version__ = (0, 0, 1)
+__version__ = (0, 0, 2)
 """
                                 _
   __   _____  ___  ___ ___   __| | ___ _ __
@@ -264,6 +264,8 @@ def strftime(time: Union[int, float]):
 
 
 def decode_waveform(wf):
+    if not wf:
+        return [0 for _ in range(0, 20)]
     bits_count = len(wf) * 8
     values_count = bits_count // 5
 
@@ -296,11 +298,7 @@ async def get_reply(message: Message) -> Union[dict, None]:
     if not message.fwd_from:
         if reply := await message.get_reply_message():
             reply_name = telethon.utils.get_display_name(reply.sender)
-            reply_text = get_message_text(reply, True) + (
-                ". " + reply.raw_text
-                if reply.raw_text and get_message_text(reply, True)
-                else reply.raw_text or ""
-            )
+            reply_text = get_message_text(reply, True)
 
     return (
         {
