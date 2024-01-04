@@ -1,4 +1,4 @@
-__version__ = (0, 0, 2)
+__version__ = (0, 0, 4)
 """
                                 _
   __   _____  ___  ___ ___   __| | ___ _ __
@@ -31,14 +31,14 @@ logger = logging.getLogger(__name__)
 
 class EntityPayload:
     def __init__(
-        self,
-        type_: str,
-        offset: int,
-        length: int,
-        url: Union[str, None] = None,
-        user: Union[dict, None] = None,
-        language: Union[str, None] = None,
-        **kwargs,
+            self,
+            type_: str,
+            offset: int,
+            length: int,
+            url: Union[str, None] = None,
+            user: Union[dict, None] = None,
+            language: Union[str, None] = None,
+            **kwargs,
     ):
         self.type = type_
         self.offset = offset
@@ -65,16 +65,16 @@ class EntityPayload:
 
 class UserPayload:
     def __init__(
-        self,
-        id_: int,
-        first_name: str,
-        last_name: str,
-        username: str,
-        language_code: str,
-        title: Union[str, None],
-        emoji_status: str,
-        photo: dict,
-        type_: str,
+            self,
+            id_: int,
+            first_name: str,
+            last_name: str,
+            username: Union[str, None],
+            language_code: str,
+            title: Union[str, None],
+            emoji_status: Union[str, None],
+            photo: Union[dict, None],
+            type_: str,
     ):
         self.id = id_
         self.first_name = first_name
@@ -104,20 +104,22 @@ class UserPayload:
 
 class MessagePayload:
     def __init__(
-        self,
-        text: str,
-        entities: Union[List[EntityPayload], None],
-        chat_id: int,
-        avatar: bool,
-        from_: UserPayload,
-        reply: Union[dict, None],
-        media: Union[dict, None] = None,
-        voice: Union[str, None] = None,
-        is_forward: bool = False,
-        via_bot: Union[str, None] = None,
+            self,
+            text: str,
+            entities: Union[List[EntityPayload], None],
+            chat_id: int,
+            avatar: bool,
+            from_: UserPayload,
+            reply: Union[dict, None],
+            media: Union[dict, None] = None,
+            media_type: Union[str, None] = None,
+            voice: Union[str, None] = None,
+            is_forward: Union[bool, None] = False,
+            via_bot: Union[bool, None] = None,
     ):
         self.text = text
         self.media = media
+        self.media_type = media_type
         self.voice = {"waveform": voice} if voice else None
         self.entities = entities
         self.chat_id = chat_id
@@ -135,6 +137,7 @@ class MessagePayload:
         return {
             "text": self.text,
             "media": {"base64": self.media} if self.media else None,
+            "mediaType": self.media_type,
             "voice": self.voice,
             "entities": [entity.to_dict() for entity in self.entities]
             if self.entities
@@ -148,10 +151,10 @@ class MessagePayload:
 
 class QuotePayload:
     def __init__(
-        self,
-        messages: List[MessagePayload],
-        type_: str = "quote",
-        **kwargs,
+            self,
+            messages: List[MessagePayload],
+            type_: str = "quote",
+            **kwargs,
     ):
         self.type = type_
         self.messages = messages
@@ -172,10 +175,10 @@ class QuotePayload:
 def get_message_media(message: Message):
     return (
         message.photo
-        #or message.sticker
-        #or message.video
-        #or message.video_note
-        #or message.gif
+        # or message.sticker
+        # or message.video
+        # or message.video_note
+        # or message.gif
         or message.web_preview
         if message and message.media
         else None
@@ -188,7 +191,6 @@ def get_entities(entities: types.TypeMessageEntity):
     if entities:
         for entity in entities:
             entity = entity.to_dict()
-            logger.error(entity)
             entity["type"] = entity.pop("_").replace("MessageEntity", "").lower()
             if entity["type"] == "customemoji":
                 entity["type"] = "custom_emoji"
@@ -212,13 +214,13 @@ def get_message_text(message: Message, reply: bool = False):
     mb = 1024 * 1024
     if message.photo and reply:
         return "📷 Photo"
-    elif message.sticker:  #and reply:
+    elif message.sticker:  # and reply:
         return f"{message.file.emoji} Sticker"
-    elif message.video_note:  #and reply:
+    elif message.video_note:  # and reply:
         return "📹 Video note"
-    elif message.video:  #and reply:
+    elif message.video:  # and reply:
         return "📹 Video"
-    elif message.gif:  #and reply:
+    elif message.gif:  # and reply:
         return "🖼 GIF"
     elif message.poll:
         return "📊 Questioning"
@@ -239,7 +241,7 @@ def get_message_text(message: Message, reply: bool = False):
         duration = strftime(audio_attributes.duration)
         return f"🎧 Music: {duration} | {audio_attributes.performer} - {audio_attributes.title}"
     elif type(message.media) == types.MessageMediaDocument and not get_message_media(
-        message
+            message
     ):
         media = message.media.document.size
         size = (
@@ -286,7 +288,7 @@ def decode_waveform(wf):
     last_value = (
         wf[last_byte_idx]
         if last_byte_idx == len(wf) - 1
-        else int.from_bytes(wf[last_byte_idx : last_byte_idx + 2], "little")
+        else int.from_bytes(wf[last_byte_idx: last_byte_idx + 2], "little")
     )
     result.append((last_value >> last_bit_shift) & 0b11111)
 
@@ -317,7 +319,7 @@ class QuotesMod(loader.Module):
     Quotes by @vsecoder
 
     Now doesn't work stickers, gifs, video, audio.
-    Fake quotes later.
+    Fake stories later
 
     Thk @Fl1yd, based on his SQuotes module
     """
@@ -359,10 +361,36 @@ class QuotesMod(loader.Module):
             await self.quote_parse_messages(message, count),
             ("stories" if stories else "quote"),
             **({"quote_color": bg_color, "text_color": self.settings["text_color"]}),
-        ).to_dict()
-        logger.error(payload)
+        )
 
-        r = await self._api_request(payload)
+        await self.send_quote(message, payload, stories)
+
+    async def fqcmd(self, message: Message) -> None:
+        """
+        <@ or id> <text> -r <@ or id> <text> ... - Create fake quote
+        """
+
+        args: List[str] = utils.get_args(message)
+
+        stories = False  #"!story" in args
+        [bg_color] = [self.settings["bg_color"]]
+
+        msgs = await self.fake_quote_parse_messages(message)
+
+        if not msgs:
+            await utils.answer(message, self.strings["args_error"].format(args))
+            return
+
+        payload = QuotePayload(
+            msgs,
+            ("stories" if stories else "quote"),
+            **({"quote_color": bg_color, "text_color": self.settings["text_color"]}),
+        )
+
+        await self.send_quote(message, payload, stories)
+
+    async def send_quote(self, message: Message, payload: QuotePayload, stories: bool = False) -> None:
+        r = await self._api_request(payload.to_dict())
         if r.status_code != 200:
             await utils.answer(message, self.strings["api_error"])
             return
@@ -378,7 +406,7 @@ class QuotesMod(loader.Module):
             message[0] if isinstance(message, (list, tuple, set)) else message
         ).delete()
 
-    async def quote_parse_messages(self, message: Message, count: int):
+    async def quote_parse_messages(self, message: Message, count: int) -> Union[List[MessagePayload], bool]:
         payloads = []
         messages = [
             msg
@@ -391,6 +419,61 @@ class QuotesMod(loader.Module):
             )
         ]
 
+        if len(messages) > self.settings["max_messages"]:
+            await utils.answer(
+                message,
+                f"<b>[Quotes]</b> Maximum messages count is {self.settings['max_messages']}",
+            )
+            return False
+
+        payloads.extend(await self.parse_messages(messages))
+
+        return payloads
+
+    async def fake_quote_parse_messages(self, message: Message) -> Union[List[MessagePayload], bool]:
+        # example text: @vsecoder hi my friend -r @enestasy7 hi ; <!story> (optional)
+        payloads = []
+        messages = []
+        args: List[str] = utils.get_args_raw(message).split(" -r ")
+
+        for arg in args:
+            name, text = arg.split(" ", 1)
+            if not name or not text:
+                return False
+
+            try:
+                user = await self.client.get_entity(int(name) if name.isdigit() else name)
+            except Exception:
+                return False
+
+            messages.append(
+                Message(
+                    id=0,
+                    message=text,
+                    from_id=user.id,
+                    date=message.date,
+                    out=False,
+                    media=None,
+                    reply_to=None,
+                    fwd_from=None,
+                    via_bot_id=None,
+                    reply_markup=None,
+                    entities=None,
+                    views=None,
+                    edit_date=None,
+                    post_author=None,
+                    restriction_reason=None,
+                    ttl_period=None,
+                )
+            )
+
+        payloads.extend(await self.parse_messages(messages))
+
+        return payloads
+
+    async def parse_messages(self, messages: List[Message]) -> List[MessagePayload]:
+        payloads = []
+
         for message in messages:
             media = get_message_media(message)
             base64_media = None
@@ -400,27 +483,43 @@ class QuotesMod(loader.Module):
                 ).decode()
             text = get_message_text(message, False)
             entities = get_entities(message.entities)
-            user_entity = await self.client.get_entity(
-                message.sender_id if not message.fwd_from else message.fwd_from.from_id
-            )
+            from_ = None
+            try:
+                user_entity = await self.client.get_entity(
+                    message.sender_id if not message.fwd_from else message.fwd_from.from_id
+                )
+                from_ = UserPayload(
+                    user_entity.id,
+                    user_entity.first_name,
+                    user_entity.last_name,
+                    user_entity.username
+                    if user_entity.username
+                    else user_entity.usernames[0].username if user_entity.usernames else "",
+                    "ru",
+                    None,
+                    str(user_entity.emoji_status.document_id)
+                    if user_entity.premium
+                    else None,
+                    {"small_file_id": user_entity.photo.photo_id}
+                    if user_entity.photo
+                    else None,
+                    "private",
+                )
+            except Exception:
+                logger.error("Can't get user entity")
 
-            from_ = UserPayload(
-                user_entity.id,
-                user_entity.first_name,
-                user_entity.last_name,
-                user_entity.username
-                if user_entity.username
-                else user_entity.usernames[0].username if user_entity.usernames else "",
-                "ru",
-                None,
-                str(user_entity.emoji_status.document_id)
-                if user_entity.premium
-                else None,
-                {"small_file_id": user_entity.photo.photo_id}
-                if user_entity.photo
-                else None,
-                "private",
-            )
+            if not from_:
+                from_ = UserPayload(
+                    0,
+                    message.fwd_from.from_name if message.fwd_from else "Deleted account",
+                    "",
+                    None,
+                    "ru",
+                    None,
+                    None,
+                    None,
+                    "private"
+                )
 
             reply = await get_reply(message)
 
@@ -436,20 +535,12 @@ class QuotesMod(loader.Module):
                     decode_waveform(message.voice.attributes[0].waveform)
                     if message.voice
                     else None,
-
                     True if message.fwd_from else False,
                     message.via_bot.username if message.via_bot else None
                 )
             )
 
         return payloads
-
-    async def get_profile_data(self, user: types.User):
-        avatar = await self.client.download_profile_photo(user.id, bytes)
-        return (
-            telethon.utils.get_display_name(user),
-            base64.b64encode(avatar).decode() if avatar else None,
-        )
 
     async def sqsetcmd(self, message: Message) -> None:
         """<bg_color/text_color> <value> - Configure SQuotes"""
