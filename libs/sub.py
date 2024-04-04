@@ -1,7 +1,7 @@
 
-class CheckSubscribe:
-    def __init__(self):
-        super().__init__()
+class CheckSubscribe(loader.Library):
+    developer = "@vsecoder"
+    version = (1, 0, 0)
 
     async def check(self, client, channel_name="vsecoder_m"):
         try:
