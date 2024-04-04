@@ -1,16 +1,13 @@
 from telethon.tl.functions.channels import JoinChannelRequest
-import asyncio
+
 
 class CheckSubscribe:
-    def __init__(self, client, channel_name="vsecoder_m"):
+    def __init__(self):
         super().__init__()
-        self.channel_name = channel_name
-        self.client = client
-        self.is_sub = asyncio.run(self.check)
 
-    async def check(self):
+    async def check(self, client, channel_name="vsecoder_m"):
         try:
-            channel = await self.client.get_entity(f"t.me/{self.channel_name}")
+            channel = await client.get_entity(f"t.me/{channel_name}")
             if channel.title:
                 return True
             return False

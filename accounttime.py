@@ -121,7 +121,7 @@ class AcTimeMod(loader.Module):
             suspend_on_error=True,
         )
 
-        logger.error(self.lib.is_sub)
+        logger.error(await self.lib.check(self.client))
 
     def time_format(self, unix_time: int, fmt="%Y-%m-%d") -> list:
         result = [str(datetime.utcfromtimestamp(unix_time).strftime(fmt))]
