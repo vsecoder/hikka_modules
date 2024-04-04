@@ -157,14 +157,16 @@ class QuotePayload:
             self,
             messages: List[MessagePayload],
             type_: str = "quote",
+            background: str = '',
             **kwargs,
     ):
         self.type = type_
         self.messages = messages
+        self.background = background
         self._ = kwargs
 
     def to_dict(self):
-        return {
+        r = {
             "type": self.type,
             "format": "webp",
             "width": 512,
@@ -174,6 +176,10 @@ class QuotePayload:
             **self._,
         }
 
+        if self.background:
+            r["backgroundColor"] = self.background
+
+        return r
 
 def get_message_media(message: Message):
     return (
@@ -363,7 +369,7 @@ class QuotesMod(loader.Module):
         payload = QuotePayload(
             await self.quote_parse_messages(message, count),
             ("stories" if stories else "quote"),
-            **({"quote_color": bg_color, "text_color": self.settings["text_color"]}),
+            **({"background": bg_color}),
         )
 
         await self.send_quote(message, payload, stories)
@@ -387,7 +393,7 @@ class QuotesMod(loader.Module):
         payload = QuotePayload(
             msgs,
             ("stories" if stories else "quote"),
-            **({"quote_color": bg_color, "text_color": self.settings["text_color"]}),
+            **({"background": bg_color}),
         )
 
         await self.send_quote(message, payload, stories)
@@ -546,7 +552,7 @@ class QuotesMod(loader.Module):
         return payloads
 
     async def sqsetcmd(self, message: Message) -> None:
-        """<bg_color/text_color> <value> - Configure SQuotes"""
+        """<bg_color/max_messages> <value> - Configure Quotes (text color automatically adjust to the background)"""
         args: List[str] = utils.get_args_raw(message).split(maxsplit=1)
         if not args:
             return await utils.answer(
@@ -555,8 +561,7 @@ class QuotesMod(loader.Module):
                     "<b>[Quotes]</b> Settings:\n\nMax messages"
                     " (<code>max_messages</code>):"
                     f" {self.settings['max_messages']}\nBackground color"
-                    f" (<code>bg_color</code>): {self.settings['bg_color']}\nForeground"
-                    f" color (<code>text_color</code>): {self.settings['text_color']}"
+                    f" (<code>bg_color</code>): {self.settings['bg_color']}"
                 ),
             )
 
@@ -569,7 +574,7 @@ class QuotesMod(loader.Module):
             await utils.answer(message, "<b>[Quotes]</b> Insufficient args")
             return
 
-        mods = ["max_messages", "bg_color", "text_color"]
+        mods = ["max_messages", "bg_color"]
         if args[0] not in mods:
             await utils.answer(message, f"<b>[Quotes]</b> Unknown param")
             return
@@ -592,7 +597,7 @@ class QuotesMod(loader.Module):
         settings: dict = self.db.get("Quotes", "settings", {})
         if not settings or force:
             settings.update(
-                {"max_messages": 15, "bg_color": "#162330", "text_color": "#fff"}
+                {"max_messages": 15, "bg_color": "#162330"}
             )
             self.db.set("Quotes", "settings", settings)
 
