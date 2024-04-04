@@ -19,7 +19,6 @@ import logging
 from aiogram.types import Message as AiogramMessage
 from .. import loader  # type: ignore
 from ..inline.types import InlineCall  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 import requests
 
 logger = logging.getLogger(__name__)

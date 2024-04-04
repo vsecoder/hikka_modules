@@ -22,7 +22,6 @@ from .. import loader, utils  # type: ignore
 import datetime as dt
 import re
 from telethon.tl.types import Message
-from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 

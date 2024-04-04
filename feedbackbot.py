@@ -20,7 +20,6 @@ from telethon.utils import get_display_name
 from aiogram.types import Message as AiogramMessage
 from .. import loader, utils  # type: ignore
 from ..inline.types import InlineCall  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 

@@ -23,7 +23,6 @@ import aiohttp
 from deep_translator import GoogleTranslator  # type: ignore
 
 from .. import loader, utils  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 translator = GoogleTranslator()

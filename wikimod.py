@@ -18,7 +18,6 @@ __version__ = (1, 0, 0)
 import logging
 import wikipedia  # type: ignore
 from .. import loader, utils  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 

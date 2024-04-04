@@ -24,8 +24,6 @@ from telethon import TelegramClient
 from telethon.tl.types import Message
 from .. import loader, utils  # type: ignore
 
-from telethon.tl.functions.channels import JoinChannelRequest
-
 
 logger = logging.getLogger(__name__)
 

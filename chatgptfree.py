@@ -16,7 +16,6 @@ version = (1, 0, 0)
 from telethon import functions
 from telethon.tl.types import Message
 import asyncio
-from telethon.tl.functions.channels import JoinChannelRequest
 import logging
 
 from .. import loader, utils  # type: ignore

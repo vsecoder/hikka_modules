@@ -23,7 +23,6 @@ import imgkit  # type: ignore
 from PIL import Image
 
 from image2ascii.core import Image2ASCII  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 
 
 logger = logging.getLogger(__name__)

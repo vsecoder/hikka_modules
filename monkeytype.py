@@ -21,7 +21,6 @@ import logging
 import aiohttp
 
 from .. import loader, utils  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 

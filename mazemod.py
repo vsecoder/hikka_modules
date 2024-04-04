@@ -20,7 +20,6 @@ import random
 from telethon import TelegramClient
 from .. import loader  # type: ignore
 from ..inline.types import InlineCall  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 

@@ -30,9 +30,6 @@ from telethon.errors.rpcerrorlist import FloodWaitError, MessageNotModifiedError
 from telethon.tl.functions.account import UpdateProfileRequest
 from .. import loader, utils  # type: ignore
 
-from telethon.tl.functions.channels import JoinChannelRequest
-
-
 logger = logging.getLogger(__name__)
 logging.getLogger("yandex_music").propagate = False
 

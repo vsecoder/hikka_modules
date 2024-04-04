@@ -23,7 +23,6 @@ from dateutil.relativedelta import relativedelta
 import numpy as np
 from datetime import datetime
 from .. import loader, utils  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 
 data = {
     "5396587273": 1648014800,

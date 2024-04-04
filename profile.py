@@ -22,8 +22,6 @@ import imgkit  # type: ignore
 import base64
 import requests
 
-from telethon.tl.functions.channels import JoinChannelRequest
-
 logger = logging.getLogger(__name__)
 
 

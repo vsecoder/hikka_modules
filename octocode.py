@@ -31,8 +31,6 @@ from pygments.styles.dracula import DraculaStyle
 
 from io import BytesIO
 
-from telethon.tl.functions.channels import JoinChannelRequest
-
 
 STYLE_CLASS_MAP = {
     "monokai": MonokaiStyle,

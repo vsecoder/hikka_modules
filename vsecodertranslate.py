@@ -18,7 +18,6 @@ __version__ = (2, 2, 1)
 import logging
 import translators as vt  # type: ignore
 from .. import loader, utils  # type: ignore
-from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
