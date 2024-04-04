@@ -1,4 +1,4 @@
-__version__ = (0, 0, 5)
+__version__ = (0, 0, 7)
 """
                                 _
   __   _____  ___  ___ ___   __| | ___ _ __
@@ -17,6 +17,7 @@ __version__ = (0, 0, 5)
 # meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/sf-black-filled/64/quote.png&title=Quotes&description=Quote%20a%20message%20using%20vsecoder%20API
 
 import base64
+import hashlib
 import io
 import logging
 from time import gmtime
@@ -26,6 +27,7 @@ import requests
 import telethon  # type: ignore
 from telethon.tl import types  # type: ignore
 from telethon.tl.patched import Message  # type: ignore
+from telethon.tl.types import PeerUser, PeerChat, PeerChannel, PeerBlocked  # type: ignore
 
 from .. import loader, utils  # type: ignore
 
@@ -123,7 +125,7 @@ class MessagePayload:
         self.text = text
         self.media = media
         self.media_type = media_type
-        self.voice = {"waveform": voice} if voice else None
+        self.voice = {"waveform": voice} if voice is list else None
         self.entities = entities
         self.chat_id = chat_id
         self.avatar = avatar
@@ -480,6 +482,84 @@ class QuotesMod(loader.Module):
 
         return payloads
 
+    async def get_entity(self, message: Message) -> UserPayload:
+        chat = message.peer_id
+        peer = message.from_id or chat
+        fwd = message.fwd_from
+
+        if fwd:
+            peer = fwd.from_id
+            name = fwd.post_author or fwd.from_name
+
+        t = type(peer)
+
+        if t is int:
+            uid = peer
+        elif t is PeerUser:
+            uid = peer.user_id
+        elif t is PeerChannel:
+            uid = peer.channel_id
+        elif t is PeerChat:
+            uid = peer.chat_id
+        elif t is PeerBlocked:
+            uid = peer.peer_id
+        elif not peer:
+            uid = int(hashlib.shake_256(name.encode("utf-8")).hexdigest(6), 16)
+
+        entity = None
+        try:
+            entity = await self.client.get_entity(peer)
+        except Exception:
+            entity = await message.get_chat()
+
+        if t is PeerChannel or t is PeerChat:
+            formated_entity = UserPayload(
+                entity.id,
+                entity.title,
+                '',
+                '',
+                "ru",
+                None,
+                None,
+                {"small_file_id": entity.photo.photo_id}
+                if entity.photo
+                else None,
+                "private",
+            )
+        else:
+            try:
+                formated_entity = UserPayload(
+                    entity.id,
+                    entity.first_name,
+                    entity.last_name,
+                    entity.username
+                    if entity.username
+                    else entity.usernames[0].username if entity.usernames else "",
+                    "ru",
+                    None,
+                    str(entity.emoji_status.document_id)
+                    if entity.premium
+                    else None,
+                    {"small_file_id": entity.photo.photo_id}
+                    if entity.photo
+                    else None,
+                    "private",
+                )
+            except:
+                formated_entity = UserPayload(
+                    0,
+                    fwd.from_name if fwd else "Unknown",
+                    '',
+                    None,
+                    "ru",
+                    None,
+                    None,
+                    None,
+                    "private"
+                )
+
+        return formated_entity
+
     async def parse_messages(self, messages: List[Message]) -> List[MessagePayload]:
         payloads = []
 
@@ -492,45 +572,22 @@ class QuotesMod(loader.Module):
                 ).decode()
             text = get_message_text(message, False)
             entities = get_entities(message.entities)
-            from_ = None
-            try:
-                user_entity = await self.client.get_entity(
-                    message.sender_id if not message.fwd_from else message.fwd_from.from_id
-                )
-                from_ = UserPayload(
-                    user_entity.id,
-                    user_entity.first_name,
-                    user_entity.last_name,
-                    user_entity.username
-                    if user_entity.username
-                    else user_entity.usernames[0].username if user_entity.usernames else "",
-                    "ru",
-                    None,
-                    str(user_entity.emoji_status.document_id)
-                    if user_entity.premium
-                    else None,
-                    {"small_file_id": user_entity.photo.photo_id}
-                    if user_entity.photo
-                    else None,
-                    "private",
-                )
-            except Exception:
-                logger.error("Can't get user entity")
-
-            if not from_:
-                from_ = UserPayload(
-                    0,
-                    message.fwd_from.from_name if message.fwd_from else "Deleted account",
-                    "",
-                    None,
-                    "ru",
-                    None,
-                    None,
-                    None,
-                    "private"
-                )
+            from_ = await self.get_entity(message)
 
             reply = await get_reply(message)
+            """
+            text: str,
+            entities: Union[List[EntityPayload], None],
+            chat_id: int,
+            avatar: bool,
+            from_: UserPayload,
+            reply: Union[dict, None],
+            media: Union[dict, None] = None,
+            media_type: Union[str, None] = None,
+            voice: Union[str, None] = None,
+            is_forward: Union[bool, None] = False,
+            via_bot: Union[bool, None] = None,
+            """
 
             payloads.append(
                 MessagePayload(
@@ -541,6 +598,7 @@ class QuotesMod(loader.Module):
                     from_,
                     reply,
                     base64_media,
+                    None,
                     decode_waveform(message.voice.attributes[0].waveform)
                     if message.voice
                     else None,
@@ -604,4 +662,5 @@ class QuotesMod(loader.Module):
         return settings
 
     async def _api_request(self, data: dict):
+        #logger.error(data)
         return await utils.run_sync(requests.post, self.api_endpoint, json=data)
