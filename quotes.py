@@ -125,7 +125,7 @@ class MessagePayload:
         self.text = text
         self.media = media
         self.media_type = media_type
-        self.voice = {"waveform": voice} if voice is list else None
+        self.voice = {"waveform": voice} if type(voice) == list else None
         self.entities = entities
         self.chat_id = chat_id
         self.avatar = avatar
