@@ -1,4 +1,4 @@
-__version__ = (0, 0, 4)
+__version__ = (0, 0, 5)
 """
                                 _
   __   _____  ___  ___ ___   __| | ___ _ __
@@ -12,6 +12,9 @@ __version__ = (0, 0, 4)
     Thk @Fl1yd, based on his module
 
 """
+# meta developer: @vsecoder_m
+# meta pic: https://img.icons8.com/sf-black-filled/64/quote.png
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/sf-black-filled/64/quote.png&title=Quotes&description=Quote%20a%20message%20using%20vsecoder%20API
 
 import base64
 import io
@@ -316,12 +319,12 @@ async def get_reply(message: Message) -> Union[dict, None]:
 @loader.tds
 class QuotesMod(loader.Module):
     """
-    Quotes by @vsecoder
+    Quotes by @vsecoder [beta]
 
     Now doesn't work stickers, gifs, video, audio.
     Fake stories later
 
-    Thk @Fl1yd, based on his SQuotes module
+    Thk t.me/Fl1yd, based on his SQuotes module
     """
 
     strings = {
@@ -541,59 +544,6 @@ class QuotesMod(loader.Module):
             )
 
         return payloads
-
-    async def sqsetcmd(self, message: Message) -> None:
-        """<bg_color/text_color> <value> - Configure SQuotes"""
-        args: List[str] = utils.get_args_raw(message).split(maxsplit=1)
-        if not args:
-            return await utils.answer(
-                message,
-                (
-                    "<b>[Quotes]</b> Settings:\n\nMax messages"
-                    " (<code>max_messages</code>):"
-                    f" {self.settings['max_messages']}\nBackground color"
-                    f" (<code>bg_color</code>): {self.settings['bg_color']}\nForeground"
-                    f" color (<code>text_color</code>): {self.settings['text_color']}"
-                ),
-            )
-
-        if args[0] == "reset":
-            self.get_settings(True)
-            await utils.answer(message, "<b>[Quotes]</b> Settings has been reset")
-            return
-
-        if len(args) < 2:
-            await utils.answer(message, "<b>[Quotes]</b> Insufficient args")
-            return
-
-        mods = ["max_messages", "bg_color", "text_color"]
-        if args[0] not in mods:
-            await utils.answer(message, f"<b>[Quotes]</b> Unknown param")
-            return
-        elif args[0] == "max_messages":
-            if not args[1].isdigit():
-                await utils.answer(message, "<b>[Quotes]</b> Number is expected")
-                return
-
-            self.settings[args[0]] = int(args[1])
-
-        else:
-            self.settings[args[0]] = args[1]
-
-        self.db.set("Quotes", "settings", self.settings)
-        return await utils.answer(
-            message, f"<b>[Quotes]</b> Param {args[0]} value is now {args[1]}"
-        )
-
-    def get_settings(self, force: bool = False):
-        settings: dict = self.db.get("Quotes", "settings", {})
-        if not settings or force:
-            settings.update(
-                {"max_messages": 15, "bg_color": "#162330", "text_color": "#fff"}
-            )
-            self.db.set("Quotes", "settings", settings)
-
-        return settings
 
     async def _api_request(self, data: dict):
         return await utils.run_sync(requests.post, self.api_endpoint, json=data)
