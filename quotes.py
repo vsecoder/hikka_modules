@@ -15,13 +15,20 @@ __version__ = (0, 0, 7)
 # meta developer: @vsecoder_m
 # meta pic: https://img.icons8.com/sf-black-filled/64/quote.png
 # meta banner: https://chojuu.vercel.app/api/banner?img=https://img.icons8.com/sf-black-filled/64/quote.png&title=Quotes&description=Quote%20a%20message%20using%20vsecoder%20API
+# requires: pydub speechrecognition python-ffmpeg
+# scope: ffmpeg
 
 import base64
 import hashlib
 import io
+import os
+import tempfile
+import asyncio
 import logging
 from time import gmtime
 from typing import List, Union
+import speech_recognition as sr
+from pydub import AudioSegment
 
 import requests
 import telethon  # type: ignore
@@ -221,7 +228,7 @@ def get_entities(entities: types.TypeMessageEntity):
     return r
 
 
-def get_message_text(message: Message, reply: bool = False):
+def get_message_text(message: Message, reply: bool = False, voice_text: str = ''):
     mb = 1024 * 1024
     if message.photo and reply:
         return "📷 Photo"
@@ -246,7 +253,7 @@ def get_message_text(message: Message, reply: bool = False):
             if message.voice.size < mb
             else (message.voice.size / 1024 / 1024)
         )
-        return f"▶️                  {duration}, {size:.1f} {('KB' if message.voice.size < mb else 'MB')}"
+        return f"▶️                  {duration}, {size:.1f} {('KB' if message.voice.size < mb else 'MB')}\n{voice_text}"
     elif message.audio:
         audio_attributes = message.audio.attributes[0]
         duration = strftime(audio_attributes.duration)
@@ -329,10 +336,11 @@ class QuotesMod(loader.Module):
     """
     Quotes by @vsecoder [beta]
 
-    Now doesn't work stickers, gifs, video, audio.
-    Fake stories later
+    Now doesn't work stickers, gifs, video.
+    (Fake stories later)
 
     Thk t.me/Fl1yd, based on his SQuotes module
+    Thk t.me/hikariatama, recognize from VTT module
     """
 
     strings = {
@@ -354,7 +362,7 @@ class QuotesMod(loader.Module):
 
     async def qcmd(self, message: Message) -> None:
         """
-        <reply> [quantity] [!story] [color] - Create nice quote from message(-s)
+        <reply> [quantity] [!story] [!rec] [color] - Create nice quote from message(-s)
         """
 
         args: List[str] = utils.get_args(message)
@@ -363,13 +371,11 @@ class QuotesMod(loader.Module):
             return
 
         stories = "!story" in args
+        recognize = "!rec" in args
         [count] = [int(arg) for arg in args if arg.isdigit() and int(arg) > 0] or [1]
-        [bg_color] = [arg for arg in args if arg != "!story" and not arg.isdigit()] or [
-            self.settings["bg_color"]
-        ]
-
+        bg_color = self.settings["bg_color"]
         payload = QuotePayload(
-            await self.quote_parse_messages(message, count),
+            await self.quote_parse_messages(message, count, recognize),
             ("stories" if stories else "quote"),
             **({"background": bg_color}),
         )
@@ -417,7 +423,7 @@ class QuotesMod(loader.Module):
             message[0] if isinstance(message, (list, tuple, set)) else message
         ).delete()
 
-    async def quote_parse_messages(self, message: Message, count: int) -> Union[List[MessagePayload], bool]:
+    async def quote_parse_messages(self, message: Message, count: int, recognize: bool = False) -> Union[List[MessagePayload], bool]:
         payloads = []
         messages = [
             msg
@@ -437,7 +443,7 @@ class QuotesMod(loader.Module):
             )
             return False
 
-        payloads.extend(await self.parse_messages(messages))
+        payloads.extend(await self.parse_messages(messages, recognize))
 
         return payloads
 
@@ -560,7 +566,39 @@ class QuotesMod(loader.Module):
 
         return formated_entity
 
-    async def parse_messages(self, messages: List[Message]) -> List[MessagePayload]:
+    async def recognize(self, message: Message):
+        try:
+            with tempfile.TemporaryDirectory() as tmpdir:
+                file = os.path.join(
+                    tmpdir,
+                    "audio.mp3" if message.audio else "audio.ogg",
+                )
+
+                data = await message.download_media(bytes)
+
+                with open(file, "wb") as f:
+                    f.write(data)
+
+                song = AudioSegment.from_file(
+                    file, format="mp3" if message.audio else "ogg"
+                )
+                song.export(os.path.join(tmpdir, "audio.wav"), format="wav")
+
+                r = sr.Recognizer()
+
+                with sr.AudioFile(os.path.join(tmpdir, "audio.wav")) as source:
+                    audio_data = r.record(source)
+                    text = await utils.run_sync(
+                        r.recognize_google,
+                        audio_data,
+                        language='ru-RU'
+                    )
+                    return text
+        except Exception:
+            logger.exception("Can't recognize")
+            return 'Can\'t recognize'
+
+    async def parse_messages(self, messages: List[Message], recognize: bool = False) -> List[MessagePayload]:
         payloads = []
 
         for message in messages:
@@ -570,7 +608,10 @@ class QuotesMod(loader.Module):
                 base64_media = base64.b64encode(
                     await self.client.download_file(media)
                 ).decode()
-            text = get_message_text(message, False)
+            voice_text = ''
+            if message.voice and recognize:
+                voice_text = 'Recognize:\n' + str(await self.recognize(message))
+            text = get_message_text(message, False, voice_text)
             entities = get_entities(message.entities)
             from_ = await self.get_entity(message)
 
