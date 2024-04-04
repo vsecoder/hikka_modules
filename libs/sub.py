@@ -1,5 +1,3 @@
-from telethon.tl.functions.channels import JoinChannelRequest
-
 
 class CheckSubscribe:
     def __init__(self):
