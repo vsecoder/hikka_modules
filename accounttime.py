@@ -117,6 +117,13 @@ class AcTimeMod(loader.Module):
         self.client = client
         self.db = db
 
+        self.lib = await self.import_lib(
+            "https://raw.githubusercontent.com/vsecoder/hikka_modules/main/libs/sub.py",
+            suspend_on_error=True,
+        )
+
+        logger.error(self.lib.is_sub)
+
     def time_format(self, unix_time: int, fmt="%Y-%m-%d") -> list:
         result = [str(datetime.utcfromtimestamp(unix_time).strftime(fmt))]
 
