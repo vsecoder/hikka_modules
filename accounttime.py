@@ -109,7 +109,6 @@ class AcTimeMod(loader.Module):
             "⏳ This account: {0}\n🕰 A registered: {1}\n\nP.S. The module script is"
             " trained with the number of requests from different ids, so the data can"
             " be refined",
-            self.strings["cfg_answer_text"],
         )
         self.name = self.strings["name"]
 
