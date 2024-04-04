@@ -154,13 +154,6 @@ class YmNowMod(loader.Module):
         if self.get("autobio", False):
             self.autobio.start()
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def _parse(self, do_not_loop: bool = False):
         while True:
             for widget in self.get("widgets", []):
@@ -297,9 +290,9 @@ class YmNowMod(loader.Module):
             return
 
         queues = await client.queues_list()
-        last_queue = await client.queue(queues[0].id)
 
         try:
+            last_queue = await client.queue(queues[0].id)
             last_track_id = last_queue.get_current_track()
             last_track = await last_track_id.fetch_track_async()
         except:
@@ -436,8 +429,11 @@ class YmNowMod(loader.Module):
         client = ClientAsync(self.config["YandexMusicToken"])
 
         await client.init()
-        queues = await client.queues_list()
-        last_queue = await client.queue(queues[0].id)
+        try:
+            queues = await client.queues_list()
+            last_queue = await client.queue(queues[0].id)
+        except:
+            return
 
         last_track_id = last_queue.get_current_track()
 

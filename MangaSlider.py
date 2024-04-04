@@ -38,13 +38,6 @@ class MangaSliderMod(loader.Module):
             "или добавление полноценного функционала."
         )
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def requests(self, data):
         _api = "https://api.newmanga.org/"
         _storage = "https://storage.newmanga.org/"

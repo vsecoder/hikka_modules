@@ -46,13 +46,6 @@ class SpeechCensorshipMod(loader.Module):
         self.get("censorship_work", False)
         self.me = await client.get_me()
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     def __init__(self):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
@@ -92,18 +85,21 @@ class SpeechCensorshipMod(loader.Module):
         return text
 
     async def watcher(self, message):
-        if self.me.id != message.from_id:
+        try:
+            if self.me.id != message.from_id:
+                return
+
+            censorship_work = self.get("censorship_work", False)
+
+            if not censorship_work:
+                return
+
+            text = message.text
+
+            if text:
+                censored = await self.censor_task(text)
+
+                if text != censored:
+                    await message.edit(censored)
+        except:
             return
-
-        censorship_work = self.get("censorship_work", False)
-
-        if not censorship_work:
-            return
-
-        text = message.text
-
-        if text:
-            censored = await self.censor_task(text)
-
-            if text != censored:
-                await message.edit(censored)

@@ -117,13 +117,6 @@ class AcTimeMod(loader.Module):
         self.client = client
         self.db = db
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     def time_format(self, unix_time: int, fmt="%Y-%m-%d") -> list:
         result = [str(datetime.utcfromtimestamp(unix_time).strftime(fmt))]
 

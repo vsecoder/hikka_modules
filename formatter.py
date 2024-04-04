@@ -64,13 +64,6 @@ class FormatterMod(loader.Module):
             suspend_on_error=True,
         )
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def watcher(self, message: Message):
         if (
             not isinstance(message, Message)

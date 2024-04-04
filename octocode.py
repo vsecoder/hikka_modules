@@ -118,13 +118,6 @@ class OctoCodeMod(loader.Module):
         self.client = client
         self.db = db
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     def __init__(self):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(

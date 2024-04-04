@@ -66,13 +66,6 @@ class RussianRouletteMod(loader.Module):
         self.client = client
         self.db = db
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     @loader.unrestricted
     @loader.ratelimit
     async def revolvercmd(self, message):

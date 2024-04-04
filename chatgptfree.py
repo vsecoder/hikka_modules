@@ -48,13 +48,6 @@ class ChatGPTfreeMod(loader.Module):
         self.db = db
         self.gpt_free = "@Jarvis_IT_Assistant_bot"
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def message_q(
         self,
         text: str,

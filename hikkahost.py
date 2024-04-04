@@ -69,13 +69,6 @@ class HikkahostMod(loader.Module):
         self.me = await client.get_me()
         self.bot = "@hikkahost_bot"
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def get_response(self, command, timeout=10):
         async with self.client.conversation(self.bot, timeout=timeout) as conv:
             m = await conv.send_message(command)

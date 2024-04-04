@@ -201,13 +201,6 @@ class SearXMod(loader.Module):
     async def client_ready(self, client, db):
         self._client = client
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def searxcmd(self, message):
         """
          {text} - search text in the internet

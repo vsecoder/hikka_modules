@@ -46,13 +46,6 @@ class WikiMod(loader.Module):
     async def client_ready(self, client, db):
         self._client = client
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def wikicmd(self, message):
         """
         <text> - search in wikipedia

@@ -157,13 +157,6 @@ class MazeModMod(loader.Module):
         self._db = db
         self._client = client
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def render(self, message: InlineCall, press, maze, player):
         text = self.strings["answer"].format(self.strings["not_allowed"])
         move = {"x": player["x"], "y": player["y"]}

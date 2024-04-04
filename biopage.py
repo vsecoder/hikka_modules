@@ -61,13 +61,6 @@ class BioPageMod(loader.Module):
         self._client = client
         self.botfather = "@BotFather"
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def bot_conifg(self):
         if self.config["toggle"]:
             async with self._client.conversation(self.botfather) as conv:

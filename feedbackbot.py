@@ -77,13 +77,6 @@ class FeedbackBotMod(loader.Module):
             '❌ Toggle in .security "✅ Everyone (inline)" to use'
         )
 
-        # morisummermods feature
-        try:
-            channel = await self.client.get_entity("t.me/vsecoder_m")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join vsecoder_m")
-
     async def aiogram_watcher(self, message: AiogramMessage):
         if message.text == "/start feedback":
             if str(message.from_user.id) in map(str, self._ban_list):
