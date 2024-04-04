@@ -1,3 +1,5 @@
+from .. import loader
+
 
 class CheckSubscribe(loader.Library):
     developer = "@vsecoder"
