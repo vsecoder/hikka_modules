@@ -31,7 +31,7 @@ class HentaiMangaMod(loader.Module):
     strings = {
         "name": "HentaiManga",
         "message": "<b>Title:</b> <code>{title}</code>\n<b>Pages:</b> {total}\n<b>Tags:</b> {tags}\n\n"
-                   "Command to get this manga: <code>.ghm {api} {id}</code>",
+        "Command to get this manga: <code>.ghm {api} {id}</code>",
         "time": "<b>Wait...</b>",
         "warn-form": (
             "<b>⚠️ Attention!</b>\n<b>😰 This module is 18+\n"
@@ -41,11 +41,11 @@ class HentaiMangaMod(loader.Module):
         "yes": "✅ Yes",
         "no": "❌ No",
         "args_error": "<b>Not enough arguments</b>",
-        "not_found": "<b>Not found</b>"
+        "not_found": "<b>Not found</b>",
     }
     strings_ru = {
         "message": "<b>Название:</b> <code>{title}</code>\n<b>Страниц:</b> {total}\n<b>Теги:</b> {tags}\n\n"
-                   "Команда для получения этой манги: <code>.ghm {api} {id}</code>",
+        "Команда для получения этой манги: <code>.ghm {api} {id}</code>",
         "time": "<b>Ожидайте...</b>",
         "warn-form": (
             "<b>⚠️ Внимание!</b>\n<b>😰 Данный модуль 18+\n"
@@ -55,7 +55,7 @@ class HentaiMangaMod(loader.Module):
         "yes": "✅ Да",
         "no": "❌ Нет",
         "args_error": "<b>Недостаточно аргументов</b>",
-        "not_found": "<b>Не найдено</b>"
+        "not_found": "<b>Не найдено</b>",
     }
 
     def __init__(self):
@@ -127,9 +127,7 @@ class HentaiMangaMod(loader.Module):
 
         api = args[0] if args and args[0] in self.apis else "3hentai"
 
-        mang = await request(
-            self.apis[api]["random"]
-        )
+        mang = await request(self.apis[api]["random"])
 
         await self.gallery(message, mang, api)
 
@@ -153,9 +151,7 @@ class HentaiMangaMod(loader.Module):
         if args[0] not in self.apis:
             return await utils.answer(message, self.strings["args_error"])
 
-        mang = await request(
-            self.apis[args[0]]["get"].format(id=args[1])
-        )
+        mang = await request(self.apis[args[0]]["get"].format(id=args[1]))
 
         if not mang:
             return await utils.answer(message, self.strings["not_found"])

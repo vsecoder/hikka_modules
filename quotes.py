@@ -43,14 +43,14 @@ logger = logging.getLogger(__name__)
 
 class EntityPayload:
     def __init__(
-            self,
-            type_: str,
-            offset: int,
-            length: int,
-            url: Union[str, None] = None,
-            user: Union[dict, None] = None,
-            language: Union[str, None] = None,
-            **kwargs,
+        self,
+        type_: str,
+        offset: int,
+        length: int,
+        url: Union[str, None] = None,
+        user: Union[dict, None] = None,
+        language: Union[str, None] = None,
+        **kwargs,
     ):
         self.type = type_
         self.offset = offset
@@ -77,16 +77,16 @@ class EntityPayload:
 
 class UserPayload:
     def __init__(
-            self,
-            id_: int,
-            first_name: str,
-            last_name: str,
-            username: Union[str, None],
-            language_code: str,
-            title: Union[str, None],
-            emoji_status: Union[str, None],
-            photo: Union[dict, None],
-            type_: str,
+        self,
+        id_: int,
+        first_name: str,
+        last_name: str,
+        username: Union[str, None],
+        language_code: str,
+        title: Union[str, None],
+        emoji_status: Union[str, None],
+        photo: Union[dict, None],
+        type_: str,
     ):
         self.id = id_
         self.first_name = first_name
@@ -116,18 +116,18 @@ class UserPayload:
 
 class MessagePayload:
     def __init__(
-            self,
-            text: str,
-            entities: Union[List[EntityPayload], None],
-            chat_id: int,
-            avatar: bool,
-            from_: UserPayload,
-            reply: Union[dict, None],
-            media: Union[dict, None] = None,
-            media_type: Union[str, None] = None,
-            voice: Union[str, None] = None,
-            is_forward: Union[bool, None] = False,
-            via_bot: Union[bool, None] = None,
+        self,
+        text: str,
+        entities: Union[List[EntityPayload], None],
+        chat_id: int,
+        avatar: bool,
+        from_: UserPayload,
+        reply: Union[dict, None],
+        media: Union[dict, None] = None,
+        media_type: Union[str, None] = None,
+        voice: Union[str, None] = None,
+        is_forward: Union[bool, None] = False,
+        via_bot: Union[bool, None] = None,
     ):
         self.text = text
         self.media = media
@@ -163,11 +163,11 @@ class MessagePayload:
 
 class QuotePayload:
     def __init__(
-            self,
-            messages: List[MessagePayload],
-            type_: str = "quote",
-            background: str = '',
-            **kwargs,
+        self,
+        messages: List[MessagePayload],
+        type_: str = "quote",
+        background: str = "",
+        **kwargs,
     ):
         self.type = type_
         self.messages = messages
@@ -190,13 +190,14 @@ class QuotePayload:
 
         return r
 
+
 def get_message_media(message: Message):
     return (
         message.photo
-        # or message.sticker
-        # or message.video
-        # or message.video_note
-        # or message.gif
+        or message.sticker
+        or message.video
+        or message.video_note
+        or message.gif
         or message.web_preview
         if message and message.media
         else None
@@ -228,23 +229,23 @@ def get_entities(entities: types.TypeMessageEntity):
     return r
 
 
-def get_message_text(message: Message, reply: bool = False, voice_text: str = ''):
+def get_message_text(message: Message, reply: bool = False, voice_text: str = ""):
     mb = 1024 * 1024
     if message.photo and reply:
         return "📷 Photo"
-    elif message.sticker:  # and reply:
+    elif message.sticker and reply:
         return f"{message.file.emoji} Sticker"
-    elif message.video_note:  # and reply:
+    elif message.video_note and reply:
         return "📹 Video note"
-    elif message.video:  # and reply:
+    elif message.video and reply:
         return "📹 Video"
-    elif message.gif:  # and reply:
+    elif message.gif and reply:
         return "🖼 GIF"
-    elif message.poll:
+    elif message.poll and reply:
         return "📊 Questioning"
-    elif message.geo:
+    elif message.geo and reply:
         return "📍 Geolocation"
-    elif message.contact:
+    elif message.contact and reply:
         return "👤 Contact"
     elif message.voice:
         duration = strftime(message.voice.attributes[0].duration)
@@ -259,15 +260,13 @@ def get_message_text(message: Message, reply: bool = False, voice_text: str = ''
         duration = strftime(audio_attributes.duration)
         return f"🎧 Music: {duration} | {audio_attributes.performer} - {audio_attributes.title}"
     elif type(message.media) == types.MessageMediaDocument and not get_message_media(
-            message
+        message
     ):
         media = message.media.document.size
-        size = (
-            media / 1024
-            if media < mb
-            else (media / 1024 / 1024)
+        size = media / 1024 if media < mb else (media / 1024 / 1024)
+        return (
+            f"💾 File: {message.file.name}, {size:.1f} {('KB' if media < mb else 'MB')}"
         )
-        return f"💾 File: {message.file.name}, {size:.1f} {('KB' if media < mb else 'MB')}"
     elif type(message.media) == types.MessageMediaDice:
         return f"{message.media.emoticon} {message.media.value} points"
     elif type(message) == types.MessageService:
@@ -306,7 +305,7 @@ def decode_waveform(wf):
     last_value = (
         wf[last_byte_idx]
         if last_byte_idx == len(wf) - 1
-        else int.from_bytes(wf[last_byte_idx: last_byte_idx + 2], "little")
+        else int.from_bytes(wf[last_byte_idx : last_byte_idx + 2], "little")
     )
     result.append((last_value >> last_bit_shift) & 0b11111)
 
@@ -389,7 +388,7 @@ class QuotesMod(loader.Module):
 
         args: List[str] = utils.get_args(message)
 
-        stories = False  #"!story" in args
+        stories = False  # "!story" in args
         [bg_color] = [self.settings["bg_color"]]
 
         msgs = await self.fake_quote_parse_messages(message)
@@ -406,7 +405,9 @@ class QuotesMod(loader.Module):
 
         await self.send_quote(message, payload, stories)
 
-    async def send_quote(self, message: Message, payload: QuotePayload, stories: bool = False) -> None:
+    async def send_quote(
+        self, message: Message, payload: QuotePayload, stories: bool = False
+    ) -> None:
         r = await self._api_request(payload.to_dict())
         if r.status_code != 200:
             await utils.answer(message, self.strings["api_error"])
@@ -423,7 +424,9 @@ class QuotesMod(loader.Module):
             message[0] if isinstance(message, (list, tuple, set)) else message
         ).delete()
 
-    async def quote_parse_messages(self, message: Message, count: int, recognize: bool = False) -> Union[List[MessagePayload], bool]:
+    async def quote_parse_messages(
+        self, message: Message, count: int, recognize: bool = False
+    ) -> Union[List[MessagePayload], bool]:
         payloads = []
         messages = [
             msg
@@ -447,7 +450,9 @@ class QuotesMod(loader.Module):
 
         return payloads
 
-    async def fake_quote_parse_messages(self, message: Message) -> Union[List[MessagePayload], bool]:
+    async def fake_quote_parse_messages(
+        self, message: Message
+    ) -> Union[List[MessagePayload], bool]:
         # example text: @vsecoder hi my friend -r @enestasy7 hi ; <!story> (optional)
         payloads = []
         messages = []
@@ -459,7 +464,9 @@ class QuotesMod(loader.Module):
                 return False
 
             try:
-                user = await self.client.get_entity(int(name) if name.isdigit() else name)
+                user = await self.client.get_entity(
+                    int(name) if name.isdigit() else name
+                )
             except Exception:
                 return False
 
@@ -522,14 +529,12 @@ class QuotesMod(loader.Module):
             formated_entity = UserPayload(
                 entity.id,
                 entity.title,
-                '',
-                '',
+                "",
+                "",
                 "ru",
                 None,
                 None,
-                {"small_file_id": entity.photo.photo_id}
-                if entity.photo
-                else None,
+                {"small_file_id": entity.photo.photo_id} if entity.photo else None,
                 "private",
             )
         else:
@@ -540,28 +545,26 @@ class QuotesMod(loader.Module):
                     entity.last_name,
                     entity.username
                     if entity.username
-                    else entity.usernames[0].username if entity.usernames else "",
+                    else entity.usernames[0].username
+                    if entity.usernames
+                    else "",
                     "ru",
                     None,
-                    str(entity.emoji_status.document_id)
-                    if entity.premium
-                    else None,
-                    {"small_file_id": entity.photo.photo_id}
-                    if entity.photo
-                    else None,
+                    str(entity.emoji_status.document_id) if entity.premium else None,
+                    {"small_file_id": entity.photo.photo_id} if entity.photo else None,
                     "private",
                 )
             except:
                 formated_entity = UserPayload(
                     0,
                     fwd.from_name if fwd else "Unknown",
-                    '',
+                    "",
                     None,
                     "ru",
                     None,
                     None,
                     None,
-                    "private"
+                    "private",
                 )
 
         return formated_entity
@@ -589,16 +592,16 @@ class QuotesMod(loader.Module):
                 with sr.AudioFile(os.path.join(tmpdir, "audio.wav")) as source:
                     audio_data = r.record(source)
                     text = await utils.run_sync(
-                        r.recognize_google,
-                        audio_data,
-                        language='ru-RU'
+                        r.recognize_google, audio_data, language="ru-RU"
                     )
                     return text
         except Exception:
             logger.exception("Can't recognize")
-            return 'Can\'t recognize'
+            return "Can't recognize"
 
-    async def parse_messages(self, messages: List[Message], recognize: bool = False) -> List[MessagePayload]:
+    async def parse_messages(
+        self, messages: List[Message], recognize: bool = False
+    ) -> List[MessagePayload]:
         payloads = []
 
         for message in messages:
@@ -608,9 +611,9 @@ class QuotesMod(loader.Module):
                 base64_media = base64.b64encode(
                     await self.client.download_file(media)
                 ).decode()
-            voice_text = ''
+            voice_text = ""
             if message.voice and recognize:
-                voice_text = 'Recognize:\n' + str(await self.recognize(message))
+                voice_text = "Recognize:\n" + str(await self.recognize(message))
             text = get_message_text(message, False, voice_text)
             entities = get_entities(message.entities)
             from_ = await self.get_entity(message)
@@ -644,7 +647,7 @@ class QuotesMod(loader.Module):
                     if message.voice
                     else None,
                     True if message.fwd_from else False,
-                    message.via_bot.username if message.via_bot else None
+                    message.via_bot.username if message.via_bot else None,
                 )
             )
 
@@ -695,13 +698,11 @@ class QuotesMod(loader.Module):
     def get_settings(self, force: bool = False):
         settings: dict = self.db.get("Quotes", "settings", {})
         if not settings or force:
-            settings.update(
-                {"max_messages": 15, "bg_color": "#162330"}
-            )
+            settings.update({"max_messages": 15, "bg_color": "#162330"})
             self.db.set("Quotes", "settings", settings)
 
         return settings
 
     async def _api_request(self, data: dict):
-        #logger.error(data)
+        # logger.error(data)
         return await utils.run_sync(requests.post, self.api_endpoint, json=data)
