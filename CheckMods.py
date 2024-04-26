@@ -1,12 +1,12 @@
 """
-                                _             
-  __   _____  ___  ___ ___   __| | ___ _ __   
-  \ \ / / __|/ _ \/ __/ _ \ / _` |/ _ \ '__|  
-   \ V /\__ \  __/ (_| (_) | (_| |  __/ |     
-    \_/ |___/\___|\___\___/ \__,_|\___|_|     
+                              _
+__   _____  ___  ___ ___   __| | ___ _ __
+\ \ / / __|/ _ \/ __/ _ \ / _` |/ _ \ '__|
+ \ V /\__ \  __/ (_| (_) | (_| |  __/ |
+  \_/ |___/\___|\___\___/ \__,_|\___|_|
 
-    Copyleft 2022 t.me/vsecoder                                                            
-    This program is free software; you can redistribute it and/or modify 
+  Copyleft 2022 t.me/vsecoder
+  This program is free software; you can redistribute it and/or modify
 
 """
 

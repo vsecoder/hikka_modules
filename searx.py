@@ -1,15 +1,16 @@
 """
-                                _             
-  __   _____  ___  ___ ___   __| | ___ _ __   
-  \ \ / / __|/ _ \/ __/ _ \ / _` |/ _ \ '__|  
-   \ V /\__ \  __/ (_| (_) | (_| |  __/ |     
-    \_/ |___/\___|\___\___/ \__,_|\___|_|     
+                              _
+__   _____  ___  ___ ___   __| | ___ _ __
+\ \ / / __|/ _ \/ __/ _ \ / _` |/ _ \ '__|
+ \ V /\__ \  __/ (_| (_) | (_| |  __/ |
+  \_/ |___/\___|\___\___/ \__,_|\___|_|
 
-    Copyleft 2022 t.me/vsecoder                                                            
-    This program is free software; you can redistribute it and/or modify 
+  Copyleft 2022 t.me/vsecoder
+  This program is free software; you can redistribute it and/or modify
 
-    Thk @fleef
+  Thk @fleef
 """
+
 import contextlib
 
 # meta developer: @vsecoder_m
@@ -195,7 +196,9 @@ class SearXMod(loader.Module):
             for result in raw_results
         )
 
-        return f"📟 <b>{engine}</b>\n\n{pretty_result}\n⏱: {datetime.now() - start_time}"
+        return (
+            f"📟 <b>{engine}</b>\n\n{pretty_result}\n⏱: {datetime.now() - start_time}"
+        )
 
     async def client_ready(self, client, db):
         self._client = client
