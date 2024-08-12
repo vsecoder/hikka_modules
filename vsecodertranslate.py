@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 @loader.tds
 class VseTranslateMod(loader.Module):
+    """Traslate text"""
     strings = {
         "name": "💠 Vsecoder Translate",
         "invalid_args": "📥 Invalid arguments!",

@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 
 @loader.tds
 class FeedbackBotMod(loader.Module):
+    """FeedbackBot"""
     strings = {
         "name": "📥 Feedback",
         "start": "✌️ Hi, I'm feedback bot as {}",
