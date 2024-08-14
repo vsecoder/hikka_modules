@@ -5,7 +5,7 @@ __   _____  ___  ___ ___   __| | ___ _ __
  \ V /\__ \  __/ (_| (_) | (_| |  __/ |
   \_/ |___/\___|\___\___/ \__,_|\___|_|
 
-  Copyleft 2022 t.me/vsecoder
+  Copyleft 2024 t.me/vsecoder
   This program is free software; you can redistribute it and/or modify
 
 """
