@@ -24,7 +24,7 @@ import numpy as np
 from datetime import datetime
 from .. import loader, utils  # type: ignore
 
-{
+data = {
   "1000000": 1380326400000,
   "2768409": 1383264000000,
   "7679610": 1388448000000,
