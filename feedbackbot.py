@@ -15,7 +15,8 @@ __   _____  ___  ___ ___   __| | ___ _ __
 
 __version__ = (3, 0, 1)
 
-import logging, time
+import logging
+import time
 from telethon.utils import get_display_name
 from aiogram.types import Message as AiogramMessage
 from .. import loader, utils  # type: ignore

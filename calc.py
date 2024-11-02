@@ -87,7 +87,7 @@ class CalcMod(loader.Module):
             if press == i:
                 b = True
 
-        if b == False and expression != "" and expression != "0":
+        if b is False and expression != "" and expression != "0":
             result = eval(expression)
         else:
             result = ""

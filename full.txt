@@ -2,7 +2,6 @@ CheckMods
 MangaSlider
 RussianRoulette
 accounttime
-animechan
 ascii
 biopage
 calc
@@ -20,3 +19,4 @@ profile
 quotes
 searx
 speechcensorship
+steam
