@@ -63,7 +63,7 @@ class HentaiMangaMod(loader.Module):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "janda",
-                "janda.vsecoder.dev",
+                "144.22.39.141:3333",
                 "https://github.com/sinkaroid/jandapress",
                 validator=loader.validators.Hidden(),
             ),
@@ -74,16 +74,16 @@ class HentaiMangaMod(loader.Module):
         self.db = db
         self.apis = {
             "3hentai": {
-                "random": "https://{janda}/3hentai/random",
-                "get": "https://{janda}/3hentai/get?book={id}",
+                "random": "http://{janda}/3hentai/random",
+                "get": "http://{janda}/3hentai/get?book={id}",
             },
             "asmhentai": {
-                "random": "https://{janda}/asmhentai/random",
-                "get": "https://{janda}/asmhentai/get?book={id}",
+                "random": "http://{janda}/asmhentai/random",
+                "get": "http://{janda}/asmhentai/get?book={id}",
             },
             "hentaifox": {
-                "random": "https://{janda}/hentaifox/random",
-                "get": "https://{janda}/hentaifox/get?book={id}",
+                "random": "http://{janda}/hentaifox/random",
+                "get": "http://{janda}/hentaifox/get?book={id}",
             },
             # now not working
             # "hentai2read": {
