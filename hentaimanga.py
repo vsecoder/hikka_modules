@@ -15,13 +15,13 @@
 # meta developer: @shadow_modules, @toxicuse, @vsecoder
 # meta banner: https://i.imgur.com/8UYznku.jpeg
 
+import requests  # type: ignore
 from .. import loader, utils  # type: ignore
 from telethon.tl.types import Message  # type: ignore
 from ..inline.types import InlineCall  # type: ignore
-import requests
 
 
-async def request(url: str = "https://janda.sinkaroid.org/3hentai/random") -> dict:
+async def request(url: str) -> dict:
     """Manga handler"""
     return (await utils.run_sync(requests.get, url)).json()["data"]
 
@@ -60,21 +60,44 @@ class HentaiMangaMod(loader.Module):
 
     def __init__(self):
         self.name = self.strings["name"]
+        self.config = loader.ModuleConfig(
+            loader.ConfigValue(
+                "janda",
+                "janda.vsecoder.dev",
+                "https://github.com/sinkaroid/jandapress",
+                validator=loader.validators.Hidden(),
+            ),
+        )
 
-    async def client_ready(self, client, _):
+    async def client_ready(self, client, db):
+        self.client = client
+        self.db = db
         self.apis = {
             "3hentai": {
-                "random": "https://janda.sinkaroid.org/3hentai/random",
-                "get": "https://janda.sinkaroid.org/3hentai/get?book={id}",
+                "random": "https://{janda}/3hentai/random",
+                "get": "https://{janda}/3hentai/get?book={id}",
             },
             "asmhentai": {
-                "random": "https://janda.sinkaroid.org/asmhentai/random",
-                "get": "https://janda.sinkaroid.org/asmhentai/get?book={id}",
+                "random": "https://{janda}/asmhentai/random",
+                "get": "https://{janda}/asmhentai/get?book={id}",
             },
             "hentaifox": {
-                "random": "https://janda.sinkaroid.org/hentaifox/random",
-                "get": "https://janda.sinkaroid.org/hentaifox/get?book={id}",
+                "random": "https://{janda}/hentaifox/random",
+                "get": "https://{janda}/hentaifox/get?book={id}",
             },
+            # now not working
+            # "hentai2read": {
+            #    "random": "https://{janda}/hentai2read/random",
+            #    "get": "https://{janda}/hentai2read/get?book={id}",
+            # },
+            # "nhentai": {
+            #    "random": "https://{janda}/nhentai/random",
+            #    "get": "https://{janda}/nhentai/get?book={id}",
+            # },
+            # "pururin": {
+            #    "random": "https://{janda}/pururin/random",
+            #    "get": "https://{janda}/pururin/get?book={id}",
+            # },
         }
 
     async def gallery(self, message: Message, mang: dict, api: str = "3hentai"):
@@ -127,7 +150,7 @@ class HentaiMangaMod(loader.Module):
 
         api = args[0] if args and args[0] in self.apis else "3hentai"
 
-        mang = await request(self.apis[api]["random"])
+        mang = await request(self.apis[api]["random"].format(janda=self.config["janda"]))
 
         await self.gallery(message, mang, api)
 
@@ -151,7 +174,7 @@ class HentaiMangaMod(loader.Module):
         if args[0] not in self.apis:
             return await utils.answer(message, self.strings["args_error"])
 
-        mang = await request(self.apis[args[0]]["get"].format(id=args[1]))
+        mang = await request(self.apis[args[0]]["get"].format(id=args[1], janda=self.config['janda']))
 
         if not mang:
             return await utils.answer(message, self.strings["not_found"])
