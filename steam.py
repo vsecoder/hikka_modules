@@ -184,7 +184,7 @@ class SteamMod(loader.Module):
             message,
             self.strings["profile"].format(
                 avatar=profile["avatar"],
-                name=profile["realname"],
+                name=profile["realname"] if "realname" in profile else "NoName",
                 username=profile["personaname"],
                 level=profile["communityvisibilitystate"],
                 created_ago=created_ago,
