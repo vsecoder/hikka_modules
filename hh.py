@@ -12,7 +12,7 @@
 
 # meta developer: @vsecoder_m
 # meta pic: https://avatars.githubusercontent.com/u/128410002
-# meta banner: https://chojuu.vercel.app/api/banner?img=https://avatars.githubusercontent.com/u/128410002&title=HH&description=Hikkahost%20manager
+# meta banner: https://chojuu.vercel.app/api/banner?img=https://avatars.githubusercontent.com/u/128410002&title=HH&description=Hikkahost%20userbot%20manager%20module
 
 import os
 import enum
@@ -280,7 +280,7 @@ class HHMod(loader.Module):
         if days_end < 5:
             warns += self.strings["warn_sub_left"]
 
-        server = self.servers[host.server_id + 1]
+        server = self.servers[host.server_id - 1]
         server = self.strings["server"].format(
             flag=server["flag"],
             name=server["name"],
