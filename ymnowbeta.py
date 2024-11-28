@@ -279,7 +279,7 @@ class YmNowBetaMod(loader.Module):
             audio={
                 "url": link,
                 "title": utils.escape_html(title),
-                "performer": utils.escape_html(artists),
+                "performer": utils.escape_html(", ".join(artists)),
             },
         )
 
@@ -326,7 +326,7 @@ class YmNowBetaMod(loader.Module):
         duration_ms = int(track["duration_ms"])
 
         text = self.config["AutoBioTemplate"].format(
-            f"{artists} - {title} | {duration_ms // 1000 // 60:02}:{duration_ms // 1000 % 60:02}",
+            f"{', '.join(artists)} - {title} | {duration_ms // 1000 // 60:02}:{duration_ms // 1000 % 60:02}",
         )
 
         try:
