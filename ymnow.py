@@ -350,6 +350,18 @@ class YmNowBetaMod(loader.Module):
             await utils.answer(message, self.strings["autobiod"])
             self.autobio.stop()
 
+    @loader.command()
+    async def automsgcmd(self, message: Message):
+        """Toggle YandexMusic widgets' updates"""
+        state = not self.get("state", False)
+        self.set("state", state)
+        await utils.answer(
+            message,
+            self.strings["state"].format(
+                "on" if state else "off", self.strings("tutorial") if state else ""
+            ),
+        )
+
     @loader.loop(interval=60)
     async def autobio(self):
         client = ClientAsync(self.config["YandexMusicToken"])
