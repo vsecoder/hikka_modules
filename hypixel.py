@@ -94,7 +94,7 @@ class HypixelAPI:
 @loader.tds
 class HypixelMod(loader.Module):
     """
-    Module for getting information about minecraft Hypixel player
+    Module for getting information about minecraft Hypixel player (beta)
     """
 
     strings = {
