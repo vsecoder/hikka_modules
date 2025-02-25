@@ -503,8 +503,9 @@ class HHMod(loader.Module):
             warns += self.strings["warn_sub_left"]
 
         servers = (await api.get_servers())["data"]
-
-        server = servers[host.server_id - 1]
+        servers_dict = {s["id"]: s for s in servers}
+      
+        server = servers_dict.get(host.server_id)
         server = self.strings["server"].format(
             flag=FLAGS[server["country_code"]],
             name=server["name"],
