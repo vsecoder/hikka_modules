@@ -278,6 +278,7 @@ class Host:
         start_date: str,
         end_date: str,
         rate: float,
+        userbot: str,
     ):
         self.id = id
         self.name = name
@@ -285,6 +286,7 @@ class Host:
         self.port = port
         self.start_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%S.%f%z")
         self.end_date = datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%S.%f%z")
+        self.userbot = userbot
         self.rate = rate
 
 
