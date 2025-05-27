@@ -277,6 +277,7 @@ class Host:
         port: int,
         start_date: str,
         end_date: str,
+        password_hash: str,
         rate: float,
         userbot: str,
     ):
