@@ -26,241 +26,6 @@ from .. import loader, utils
 __version__ = (2, 0, 0)
 
 
-FLAGS = {
-    "ad": "🇦🇩",  # Андорра
-    "ae": "🇦🇪",  # ОАЭ
-    "af": "🇦🇫",  # Афганистан
-    "ag": "🇦🇬",  # Антигуа и Барбуда
-    "ai": "🇦🇮",  # Ангилья
-    "al": "🇦🇱",  # Албания
-    "am": "🇦🇲",  # Армения
-    "ao": "🇦🇴",  # Ангола
-    "aq": "🇦🇶",  # Антарктика
-    "ar": "🇦🇷",  # Аргентина
-    "at": "🇦🇹",  # Австрия
-    "au": "🇦🇺",  # Австралия
-    "aw": "🇦🇼",  # Аруба
-    "ax": "🇦🇽",  # Аландские острова
-    "az": "🇦🇿",  # Азербайджан
-    "ba": "🇧🇦",  # Босния и Герцеговина
-    "bb": "🇧🇧",  # Барбадос
-    "bd": "🇧🇩",  # Бангладеш
-    "be": "🇧🇪",  # Бельгия
-    "bf": "🇧🇫",  # Буркина-Фасо
-    "bg": "🇧🇬",  # Болгария
-    "bh": "🇧🇭",  # Бахрейн
-    "bi": "🇧🇮",  # Бурунди
-    "bj": "🇧🇯",  # Бенин
-    "bl": "🇧🇱",  # Сен-Бартельми
-    "bm": "🇧🇲",  # Бермудские острова
-    "bn": "🇧🇳",  # Бруней
-    "bo": "🇧🇴",  # Боливия
-    "bq": "🇧🇶",  # Бонэйр, Синт-Эстатиус и Саба
-    "br": "🇧🇷",  # Бразилия
-    "bs": "🇧🇸",  # Багамы
-    "bt": "🇧🇹",  # Бутан
-    "bv": "🇧🇻",  # остров Буве
-    "bw": "🇧🇼",  # Ботсвана
-    "by": "🇧🇾",  # Беларусь
-    "bz": "🇧🇿",  # Белиз
-    "ca": "🇨🇦",  # Канада
-    "cc": "🇨🇨",  # Кокосовые (Килинг) острова
-    "cd": "🇨🇩",  # Конго - Киншаса
-    "cf": "🇨🇫",  # Центральноафриканская Республика
-    "cg": "🇨🇬",  # Конго - Браззавиль
-    "ch": "🇨🇭",  # Швейцария
-    "ci": "🇨🇮",  # Кот-д’Ивуар
-    "ck": "🇨🇰",  # Острова Кука
-    "cl": "🇨🇱",  # Чили
-    "cm": "🇨🇲",  # Камерун
-    "cn": "🇨🇳",  # Китай
-    "co": "🇨🇴",  # Колумбия
-    "cr": "🇨🇷",  # Коста-Рика
-    "cu": "🇨🇺",  # Куба
-    "cv": "🇨🇻",  # Кабо-Верде
-    "cw": "🇨🇼",  # Кюрасао
-    "cx": "🇨🇽",  # остров Рождества
-    "cy": "🇨🇾",  # Кипр
-    "cz": "🇨🇿",  # Чехия
-    "de": "🇩🇪",  # Германия
-    "dj": "🇩🇯",  # Джибути
-    "dk": "🇩🇰",  # Дания
-    "dm": "🇩🇲",  # Доминика
-    "do": "🇩🇴",  # Доминиканская Республика
-    "dz": "🇩🇿",  # Алжир
-    "ec": "🇪🇨",  # Эквадор
-    "ee": "🇪🇪",  # Эстония
-    "eg": "🇪🇬",  # Египет
-    "eh": "🇪🇭",  # Западная Сахара
-    "er": "🇪🇷",  # Эритрея
-    "es": "🇪🇸",  # Испания
-    "et": "🇪🇹",  # Эфиопия
-    "fi": "🇫🇮",  # Финляндия
-    "fj": "🇫🇯",  # Фиджи
-    "fk": "🇫🇰",  # Фолклендские острова
-    "fm": "🇫🇲",  # Микронезия
-    "fo": "🇫🇴",  # Фарерские острова
-    "fr": "🇫🇷",  # Франция
-    "ga": "🇬🇦",  # Габон
-    "gb": "🇬🇧",  # Великобритания
-    "gd": "🇬🇩",  # Гренада
-    "ge": "🇬🇪",  # Грузия
-    "gf": "🇬🇫",  # Французская Гвиана
-    "gg": "🇬🇬",  # Гернси
-    "gh": "🇬🇭",  # Гана
-    "gi": "🇬🇮",  # Гибралтар
-    "gl": "🇬🇱",  # Гренландия
-    "gm": "🇬🇲",  # Гамбия
-    "gn": "🇬🇳",  # Гвинея
-    "gp": "🇬🇵",  # Гваделупа
-    "gq": "🇬🇶",  # Экваториальная Гвинея
-    "gr": "🇬🇷",  # Греция
-    "gs": "🇬🇸",  # Южная Георгия и Южные Сандвичевы острова
-    "gt": "🇬🇹",  # Гватемала
-    "gu": "🇬🇺",  # Гуам
-    "gw": "🇬🇼",  # Гвинея-Бисау
-    "gy": "🇬🇾",  # Гайана
-    "hk": "🇭🇰",  # Гонконг
-    "hm": "🇭🇲",  # остров Херд и острова Макдональд
-    "hn": "🇭🇳",  # Гондурас
-    "hr": "🇭🇷",  # Хорватия
-    "ht": "🇭🇹",  # Гаити
-    "hu": "🇭🇺",  # Венгрия
-    "id": "🇮🇩",  # Индонезия
-    "ie": "🇮🇪",  # Ирландия
-    "il": "🇮🇱",  # Израиль
-    "im": "🇮🇲",  # остров Мэн
-    "in": "🇮🇳",  # Индия
-    "io": "🇮🇴",  # Британская территория в Индийском океане
-    "iq": "🇮🇶",  # Ирак
-    "ir": "🇮🇷",  # Иран
-    "is": "🇮🇸",  # Исландия
-    "it": "🇮🇹",  # Италия
-    "je": "🇯🇪",  # Джерси
-    "jm": "🇯🇲",  # Ямайка
-    "jo": "🇯🇴",  # Иордания
-    "jp": "🇯🇵",  # Япония
-    "ke": "🇰🇪",  # Кения
-    "kg": "🇰🇬",  # Киргизия
-    "kh": "🇰🇭",  # Камбоджа
-    "ki": "🇰🇮",  # Кирибати
-    "km": "🇰🇲",  # Коморы
-    "kn": "🇰🇳",  # Сент-Китс и Невис
-    "kp": "🇰🇵",  # Корейская Народно-Демократическая Республика
-    "kr": "🇰🇷",  # Республика Корея
-    "kw": "🇰🇼",  # Кувейт
-    "ky": "🇰🇾",  # Каймановы острова
-    "kz": "🇰🇿",  # Казахстан
-    "la": "🇱🇦",  # Лаос
-    "lb": "🇱🇧",  # Ливан
-    "lc": "🇱🇨",  # Сент-Люсия
-    "li": "🇱🇮",  # Лихтенштейн
-    "lk": "🇱🇰",  # Шри-Ланка
-    "lr": "🇱🇷",  # Либерия
-    "ls": "🇱🇸",  # Лесото
-    "lt": "🇱🇹",  # Литва
-    "lu": "🇱🇺",  # Люксембург
-    "lv": "🇱🇻",  # Латвия
-    "ly": "🇱🇾",  # Ливия
-    "my": "🇲🇾",
-    "md": "🇲🇩",
-    "mv": "🇲🇻",
-    "mw": "🇲🇼",
-    "mx": "🇲🇽",
-    "my": "🇲🇾",
-    "mz": "🇲🇿",
-    "na": "🇳🇦",
-    "nc": "🇳🇨",
-    "ne": "🇳🇪",
-    "nf": "🇳🇫",
-    "ng": "🇳🇬",
-    "ni": "🇳🇮",
-    "nl": "🇳🇱",
-    "no": "🇳🇴",
-    "np": "🇳🇵",
-    "nr": "🇳🇷",
-    "nu": "🇳🇺",
-    "nz": "🇳🇿",
-    "om": "🇴🇲",
-    "pa": "🇵🇦",
-    "pe": "🇵🇪",
-    "pf": "🇵🇫",
-    "pg": "🇵🇬",
-    "ph": "🇵🇭",
-    "pk": "🇵🇰",
-    "pl": "🇵🇱",
-    "pm": "🇵🇲",
-    "pn": "🇵🇳",
-    "pr": "🇵🇷",
-    "ps": "🇵🇸",
-    "pt": "🇵🇹",
-    "pw": "🇵🇼",
-    "py": "🇵🇾",
-    "qa": "🇶🇦",
-    "re": "🇷🇪",
-    "ro": "🇷🇴",
-    "rs": "🇷🇸",
-    "ru": "🇷🇺",
-    "rw": "🇷🇼",
-    "sa": "🇸🇦",
-    "sb": "🇸🇧",
-    "sc": "🇸🇨",
-    "sd": "🇸🇩",
-    "se": "🇸🇪",
-    "sg": "🇸🇬",
-    "sh": "🇸🇭",
-    "si": "🇸🇮",
-    "sj": "🇸🇯",
-    "sk": "🇸🇰",
-    "sl": "🇸🇱",
-    "sm": "🇸🇲",
-    "sn": "🇸🇳",
-    "so": "🇸🇴",
-    "sr": "🇸🇷",
-    "ss": "🇸🇸",
-    "st": "🇸🇹",
-    "sv": "🇸🇻",
-    "sx": "🇸🇽",
-    "sy": "🇸🇾",
-    "sz": "🇸🇿",
-    "tc": "🇹🇨",
-    "td": "🇹🇩",
-    "tf": "🇹🇫",
-    "tg": "🇹🇬",
-    "th": "🇹🇭",
-    "tj": "🇹🇯",
-    "tk": "🇹🇰",
-    "tl": "🇹🇱",
-    "tm": "🇹🇲",
-    "tn": "🇹🇳",
-    "to": "🇹🇴",
-    "tr": "🇹🇷",
-    "tt": "🇹🇹",
-    "tv": "🇹🇻",
-    "tw": "🇹🇼",
-    "tz": "🇹🇿",
-    "ua": "🇺🇦",
-    "ug": "🇺🇬",
-    "um": "🇺🇲",
-    "us": "🇺🇸",
-    "va": "🇻🇦",
-    "vc": "🇻🇨",
-    "ve": "🇻🇪",
-    "vg": "🇻🇬",
-    "vi": "🇻🇮",
-    "vn": "🇻🇳",
-    "vu": "🇻🇺",
-    "wf": "🇼🇫",
-    "ws": "🇼🇸",
-    "xk": "🇽🇰",
-    "ye": "🇾🇪",
-    "yt": "🇾🇹",
-    "za": "🇿🇦",
-    "zm": "🇿🇲",
-    "zw": "🇿🇼",
-}
-
-
 class Error(enum.Enum):
     critical = 500
     not_found = 404
@@ -381,7 +146,9 @@ class HostAPI(API):
     ) -> Dict:
         route = f"{self._url}/{tg_id}/logs/{lines}"
         return await self._request(route, method="GET", headers=self.auth_header)
-
+    
+def get_flag(country_code: str = None) -> str:
+    return ''.join( chr(ord(c.upper()) + 127397) for c in country_code)
 
 @loader.tds
 class HHMod(loader.Module):
@@ -389,16 +156,19 @@ class HHMod(loader.Module):
 
     strings = {
         "name": "HH",
-        "info": (
+
+        "_cfg_doc_hinfo_message": "Custom message text in hinfo. May contain keywords: {id}, {status}, {server}, {days_end}, {cpu_percent}, {ram_usage}, {warns}.",
+        "_cfg_doc_hinfo_banner_url": "Link to banner image or None.",
+
+        "default_info": (
             "<emoji document_id=5413334818047940135>👤</emoji> <b>Info for</b> <code>{id}</code>\n\n"
             "<emoji document_id=5418136591484865679>📶</emoji> <b>Status:</b> {status}\n"
             "<emoji document_id=5415992848753379520>⚙️</emoji> <b>Server:</b> {server}\n"
             "<emoji document_id=5416042764863293485>❤️</emoji> <b>The subscription expires after</b> <code>{days_end} days</code>\n"
-            "{stats}\n"
+            "<emoji document_id=5413394354884596702>💾</emoji> <b>Used now:</b> <code>{cpu_percent}%</code> CPU, <code>{ram_usage}MB</code> RAM\n\n"
             "{warns}"
         ),
         "logs": "<emoji document_id=5411608069396254249>📄</emoji> All docker container logs from the userbot\n\n<i>In t.me/hikkahost_bot/hhapp logs more readable</i>",
-        "stats": "<emoji document_id=5413394354884596702>💾</emoji> <b>Used now:</b> <code>{cpu_percent}%</code> CPU, <code>{memory}MB</code> RAM\n",
         "loading_info": "<emoji document_id=5416094132672156295>⌛️</emoji> Loading...",
         "no_apikey": "<emoji document_id=5411402525146370107>🚫</emoji> Not specified API Key, need get token:\n\n1. Go to the @hikkahost_bot\n2. Send /token\n3. Paste token to .config HH",
         "warn_sub_left": "<emoji document_id=5411402525146370107>🚫</emoji> <i>There are less than 5 days left until the end of the subscription</i>\n",
@@ -413,16 +183,15 @@ class HHMod(loader.Module):
 
     strings_ru = {
         "name": "HH",
-        "info": (
-            "<emoji document_id=5413334818047940135>👤</emoji> <b>Информация о</b> <code>{id}</code>\n\n"
-            "<emoji document_id=5418136591484865679>📶</emoji> <b>Статус:</b> {status}\n"
-            "<emoji document_id=5415992848753379520>⚙️</emoji> <b>Сервер:</b> {server}\n"
-            "<emoji document_id=5416042764863293485>❤️</emoji> <b>Подписка истечёт через</b> <code>{days_end} дней</code>\n"
-            "{stats}\n"
-            "{warns}"
-        ),
+    #    "default_info": (
+    #        "<emoji document_id=5413334818047940135>👤</emoji> <b>Информация о</b> <code>{id}</code>\n\n"
+    #        "<emoji document_id=5418136591484865679>📶</emoji> <b>Статус:</b> {status}\n"
+    #        "<emoji document_id=5415992848753379520>⚙️</emoji> <b>Сервер:</b> {server}\n"
+    #        "<emoji document_id=5416042764863293485>❤️</emoji> <b>Подписка истечёт через</b> <code>{days_end} дней</code>\n"
+    #        "<emoji document_id=5413394354884596702>💾</emoji> <b>Используется:</b> <code>{cpu_percent}%</code> CPU, <code>{ram_usage}MB</code> RAM\n\n"
+    #        "{warns}"
+    #    ),
         "logs": "<emoji document_id=5411608069396254249>📄</emoji> Все логи docker контейнера от hikka\n\n<i>В t.me/hikkahost_bot/hhapp логи более читабельны</i>",
-        "stats": "<emoji document_id=5413394354884596702>💾</emoji> <b>Используется:</b> <code>{cpu_percent}%</code> CPU, <code>{memory}MB</code> RAM\n",
         "loading_info": "<emoji document_id=5416094132672156295>⌛️</emoji> Загрузка...",
         "no_apikey": "<emoji document_id=5411402525146370107>🚫</emoji> Не задан ключ API, нужно получить токен:\n\n1. Зайдите в @hikkahost_bot\n2. Отправьте /token\n3. Запишите токен в .config HH",
         "warn_sub_left": "<emoji document_id=5411402525146370107>🚫</emoji> <i>Менее чем через 5 дней подписка истечёт</i>\n",
@@ -443,6 +212,16 @@ class HHMod(loader.Module):
                 None,
                 validator=loader.validators.Hidden(),
             ),
+            loader.ConfigValue(
+                "hinfo_message",
+                self.strings["default_info"],
+                self.strings['_cfg_doc_hinfo_message']
+            ),
+            loader.ConfigValue(
+                "hinfo_banner_url",
+                "https://github.com/hikkahost/.github/blob/main/banners/main.jpg?raw=true",
+                self.strings['_cfg_doc_hinfo_banner_url']
+            ),
         )
 
     async def client_ready(self, client, db):
@@ -459,7 +238,7 @@ class HHMod(loader.Module):
         self._db = db
         self.me = await client.get_me()
         self.bot = "@hikkahost_bot"
-
+    
     @loader.command(
         en_doc=" - ub status",
     )
@@ -485,19 +264,17 @@ class HHMod(loader.Module):
         stats = (await api.get_stats(user_id))["stats"]
         working = True if status["status"] == "running" else False
 
+        load = {}
+
         if working:
             cpu_stats = stats["cpu_stats"]
             cpu_total_usage = cpu_stats['cpu_usage']['total_usage']
             system_cpu_usage = cpu_stats['system_cpu_usage']
 
-            ram_usage = round(stats["memory_stats"]["usage"] / (1024 * 1024), 2)
-            cpu_percent = round((cpu_total_usage / system_cpu_usage) * 100.0, 2)
-
-            stats = self.strings["stats"].format(
-                cpu_percent=cpu_percent, memory=ram_usage
-            )
-        else:
-            stats = ""
+            load = {
+                "ram_usage": round(stats["memory_stats"]["usage"] / (1024 * 1024), 2),
+                "cpu_percent": round((cpu_total_usage / system_cpu_usage) * 100.0, 2)
+            }
 
         end_date = host.end_date.replace(tzinfo=timezone.utc)
         warns = ""
@@ -510,20 +287,22 @@ class HHMod(loader.Module):
       
         server = servers_dict.get(host.server_id)
         server = self.strings["server"].format(
-            flag=FLAGS[server["country_code"]],
+            flag=get_flag(server["country_code"]),
             name=server["name"],
         )
 
         await utils.answer(
             message,
-            self.strings["info"].format(
+            self.config["hinfo_message"].format(
                 id=user_id,
                 warns=warns,
-                stats=stats,
                 server=server,
                 days_end=days_end,
                 status=self.strings["statuses"][status["status"]],
+                ram_usage=load.get("ram_usage", "0.00"),
+                cpu_percent=load.get("cpu_percent", "0.00")
             ),
+            file=self.config['hinfo_banner_url']
         )
 
     @loader.command(
